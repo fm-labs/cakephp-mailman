@@ -1,5 +1,5 @@
 {
-    "name": "your-name-here/Mailman",
+    "name": "fm-labs/cakephp-mailman",
     "description": "Mailman plugin for CakePHP",
     "type": "cakephp-plugin",
     "require": {
