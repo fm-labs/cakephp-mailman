@@ -2,7 +2,7 @@
 namespace Mailman\Controller\Admin;
 
 use Cake\Mailer\Email;
-use Mailman\Email\MailmanMailer;
+use Mailman\Mailer\MailmanMailer;
 
 /**
  * EmailMessages Controller

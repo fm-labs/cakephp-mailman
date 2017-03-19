@@ -1,6 +1,6 @@
 <?php
 
-namespace Mailman\Email\Storage;
+namespace Mailman\Mailer\Storage;
 
 
 use Cake\Core\InstanceConfigTrait;
@@ -88,7 +88,7 @@ class DatabaseEmailStorage
 
         $result = $this->_table->save($entity);
         if (!$result) {
-            Log::alert(sprintf("Mailman DatabaseEmailStorage failed to store EmailMessage"));
+            Log::alert(sprintf("Mailman DatabaseEmailStorage failed to store EmailMessage"), ['mailman', 'email']);
         }
 
         return $result;

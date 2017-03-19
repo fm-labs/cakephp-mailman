@@ -7,7 +7,7 @@ use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
-use Mailman\Email\MailmanMailer;
+use Mailman\Mailer\MailmanMailer;
 
 class EmailForm extends Form
 {

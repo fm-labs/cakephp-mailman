@@ -1,12 +1,13 @@
 <?php
 
-namespace Mailman\Email;
+namespace Mailman\Mailer;
 
+use Cake\Event\Event;
 use Cake\Log\Log;
 use Cake\Mailer\Exception\MissingActionException;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\Email;
-use Mailman\Email\Storage\DatabaseEmailStorage;
+use Mailman\Mailer\Storage\DatabaseEmailStorage;
 
 class MailmanMailer extends Mailer
 {

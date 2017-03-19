@@ -1,6 +1,7 @@
 <?php
 use Cake\Routing\Router;
 
+// Admin routes
 Router::plugin(
     'Mailman',
     ['path' => '/mailman'],
@@ -11,8 +12,5 @@ Router::plugin(
             $routes->connect('/:controller');
             $routes->fallbacks('DashedRoute');
         });
-
-        //$routes->connect('/:controller');
-        //$routes->fallbacks('DashedRoute');
     }
 );

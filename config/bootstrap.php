@@ -1,9 +1,6 @@
 <?php
 
-use Backend\Lib\Backend;
-use Cake\Core\Plugin;
 use Cake\Log\Log;
-use Cake\Mailer\Email;
 
 // Mailman log config
 if (!Log::config('mailman')) {
@@ -16,10 +13,4 @@ if (!Log::config('mailman')) {
     ]);
 }
 
-// Automatically use Mailman Email class instead of CakePHP's Mailer/Email class
-//@TODO Make this optional
-
-// Backend hook
-if (Plugin::loaded('Backend')) {
-    Backend::hookPlugin('Mailman');
-}
+\Cake\Event\EventManager::instance()->on(new \Mailman\Event\EmailListener());
