@@ -63,7 +63,6 @@ class EmailListener implements EventListenerInterface
     public function beforeRender(Event $event)
     {
         // show emails as flash messages in debug mode
-        debug(Configure::read('debug'));
         if (Configure::read('debug')) {
             if ($event->subject()->components()->has('Flash')) {
                 foreach ($this->_emails as $email) {
