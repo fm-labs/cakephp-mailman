@@ -1,6 +1,6 @@
 <?php $this->Breadcrumbs->add(__('Email Messages'), ['action' => 'index']); ?>
 <?php $this->Breadcrumbs->add(__('New {0}', __('Email Message'))); ?>
-<?= $this->Toolbar->addLink(
+<?php $this->Toolbar->addLink(
     __('List {0}', __('Email Messages')),
     ['action' => 'index'],
     ['data-icon' => 'list']

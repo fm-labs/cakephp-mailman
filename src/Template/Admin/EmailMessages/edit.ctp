@@ -1,12 +1,12 @@
 <?php $this->Breadcrumbs->add(__('Email Messages'), ['action' => 'index']); ?>
 <?php $this->Breadcrumbs->add(__('Edit {0}', __('Email Message'))); ?>
-<?= $this->Toolbar->addPostLink(
+<?php $this->Toolbar->addPostLink(
     __('Delete'),
     ['action' => 'delete', $emailMessage->id],
     ['data-icon' => 'trash', 'confirm' => __('Are you sure you want to delete # {0}?', $emailMessage->id)]
 )
 ?>
-<?= $this->Toolbar->addLink(
+<?php $this->Toolbar->addLink(
     __('List {0}', __('Email Messages')),
     ['action' => 'index'],
     ['data-icon' => 'list']
