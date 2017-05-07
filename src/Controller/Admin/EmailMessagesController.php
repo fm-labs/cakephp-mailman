@@ -17,6 +17,11 @@ class EmailMessagesController extends AppController
         'order' => ['EmailMessages.id' => 'DESC']
     ];
 
+    public $actions = [
+        'index' => 'Backend.Index',
+        'view' => 'Backend.View'
+    ];
+
     public function test()
     {
 
@@ -49,8 +54,16 @@ class EmailMessagesController extends AppController
     public function index()
     {
 
-        $this->set('emailMessages', $this->paginate($this->EmailMessages));
-        $this->set('_serialize', ['emailMessages']);
+        $this->set('fields.whitelist', [
+            //'id',
+            'date_delivery',
+            'folder',
+            'transport',
+            'from',
+            'to',
+            'subject'
+        ]);
+        $this->Backend->executeAction();
     }
 
     /**
@@ -62,11 +75,7 @@ class EmailMessagesController extends AppController
      */
     public function view($id = null)
     {
-        $emailMessage = $this->EmailMessages->get($id, [
-            'contain' => []
-        ]);
-        $this->set('emailMessage', $emailMessage);
-        $this->set('_serialize', ['emailMessage']);
+        $this->Backend->executeAction();
     }
 
     /**

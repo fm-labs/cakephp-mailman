@@ -1,6 +1,7 @@
 <?php
 namespace Mailman\Model\Table;
 
+use Cake\Core\Plugin;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -29,6 +30,52 @@ class EmailMessagesTable extends Table
         $this->primaryKey('id');
 
         $this->addBehavior('Timestamp');
+
+
+        if (Plugin::loaded('Search')) {
+            $this->addBehavior('Search.Search');
+            $this->searchManager()
+                ->add('from', 'Search.Like', [
+                    'before' => true,
+                    'after' => true,
+                    'fieldMode' => 'OR',
+                    'comparison' => 'LIKE',
+                    'wildcardAny' => '*',
+                    'wildcardOne' => '?',
+                    'field' => ['from']
+                ])
+                ->add('to', 'Search.Like', [
+                    'before' => true,
+                    'after' => true,
+                    'fieldMode' => 'OR',
+                    'comparison' => 'LIKE',
+                    'wildcardAny' => '*',
+                    'wildcardOne' => '?',
+                    'field' => ['to']
+                ])
+                ->add('subject', 'Search.Like', [
+                    'before' => true,
+                    'after' => true,
+                    'fieldMode' => 'OR',
+                    'comparison' => 'LIKE',
+                    'wildcardAny' => '*',
+                    'wildcardOne' => '?',
+                    'field' => ['subject']
+                ])
+                ->value('folder', [
+                    'filterEmpty' => true
+                ])
+                ->value('transport', [
+                    'filterEmpty' => true
+                ]);
+        }
+    }
+
+    public function sources($field)
+    {
+        switch ($field) {
+
+        }
     }
 
     /**
