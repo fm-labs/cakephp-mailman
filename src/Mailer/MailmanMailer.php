@@ -24,23 +24,26 @@ class MailmanMailer extends Mailer
      */
     public function send($action, $args = [], $headers = [])
     {
-        if (!method_exists($this, $action)) {
-            throw new MissingActionException([
-                'mailer' => $this->getName() . 'Mailer',
-                'action' => $action,
-            ]);
+
+        try {
+            if (!method_exists($this, $action)) {
+                throw new MissingActionException([
+                    'mailer' => $this->getName() . 'Mailer',
+                    'action' => $action,
+                ]);
+            }
+
+            $this->_email->setHeaders($headers);
+            if (!$this->_email->viewBuilder()->template()) {
+                $this->_email->viewBuilder()->template($action);
+            }
+
+            call_user_func_array([$this, $action], $args);
+
+            $result = $this->_send($this->_email);
+        } finally {
+            $this->reset();
         }
-
-        $this->_email->setHeaders($headers);
-        if (!$this->_email->viewBuilder()->template()) {
-            $this->_email->viewBuilder()->template($action);
-        }
-
-        call_user_func_array([$this, $action], $args);
-
-        $result = $this->_send($this->_email);
-
-        $this->reset();
 
         return $result;
     }
@@ -65,29 +68,23 @@ class MailmanMailer extends Mailer
     protected function _send(Email $email, $content = null, $throwExceptions = false)
     {
 
-        //@TODO dispatch event 'Email.beforeSend'
 
         $result = null;
         $exception = null;
         try {
-
+            //@TODO dispatch event 'Email.beforeSend'
             $result = $email->send($content);
             //@TODO dispatch event 'Email.afterSend'
 
         } catch (\Exception $ex) {
-
-            $result = [
-                'error' => $ex->getMessage(),
-            ];
+            $result = ['error' => $ex->getMessage()];
             $exception = $ex;
         }
 
-
-        //@TODO refactor with event listener
         try {
-
             $dbStorage = new DatabaseEmailStorage();
             $dbStorage->store($email, $result);
+
         } catch (\Exception $ex) {
             Log::error('Failed to store email message: ' . $ex->getMessage());
         }
