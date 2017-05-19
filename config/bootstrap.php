@@ -12,5 +12,3 @@ if (!Log::config('mailman')) {
         'scopes' => ['mailman', 'email']
     ]);
 }
-
-\Cake\Event\EventManager::instance()->on(new \Mailman\Event\EmailListener());

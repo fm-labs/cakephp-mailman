@@ -32,4 +32,9 @@ class MailmanPlugin implements EventListenerInterface
             'data-icon' => 'envelope-o',
         ]);
     }
+
+    public function __invoke()
+    {
+        \Cake\Event\EventManager::instance()->on(new \Mailman\Event\EmailListener());
+    }
 }
