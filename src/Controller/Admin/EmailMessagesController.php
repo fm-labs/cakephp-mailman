@@ -75,6 +75,20 @@ class EmailMessagesController extends AppController
      */
     public function view($id = null)
     {
+        $this->set('fields', [
+            'headers' => ['formatter' => function($val) {
+                return nl2br($val);
+            }],
+            'message' => ['formatter' => function($val) {
+                return nl2br($val);
+            }],
+            'result_headers' => ['formatter' => function($val) {
+                return nl2br($val);
+            }],
+            'result_message' => ['formatter' => function($val) {
+                return nl2br($val);
+            }],
+        ]);
         $this->Backend->executeAction();
     }
 
