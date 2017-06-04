@@ -5,6 +5,7 @@ namespace Mailman;
 
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use Cake\Routing\Router;
 
 class MailmanPlugin implements EventListenerInterface
 {
@@ -20,8 +21,19 @@ class MailmanPlugin implements EventListenerInterface
     public function implementedEvents()
     {
         return [
-            'Backend.Menu.get' => 'getBackendMenu'
+            'Backend.Menu.get' => 'getBackendMenu',
+            'Backend.Routes.build' => 'buildBackendRoutes'
         ];
+    }
+
+    public function buildBackendRoutes()
+    {
+        // Admin routes
+        Router::scope('/mailman/admin', ['plugin' => 'Mailman', 'prefix' => 'admin', '_namePrefix' => 'mailman:admin:'], function ($routes) {
+            $routes->connect('/:controller');
+            $routes->fallbacks('DashedRoute');
+        });
+
     }
 
     public function getBackendMenu(Event $event)
