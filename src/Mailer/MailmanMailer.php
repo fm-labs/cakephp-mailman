@@ -61,13 +61,12 @@ class MailmanMailer extends Mailer
      * Send email with Mailman hooks
      *
      * @param Email $email
-     * @param bool $throwExceptions
+     * @param bool $content
      * @return array
      * @throws \Exception
      */
     protected function _send(Email $email, $content = null, $throwExceptions = false)
     {
-
 
         $result = null;
         $exception = null;
@@ -75,7 +74,6 @@ class MailmanMailer extends Mailer
             //@TODO dispatch event 'Email.beforeSend'
             $result = $email->send($content);
             //@TODO dispatch event 'Email.afterSend'
-
         } catch (\Exception $ex) {
             $result = ['error' => $ex->getMessage()];
             $exception = $ex;
@@ -84,7 +82,6 @@ class MailmanMailer extends Mailer
         try {
             $dbStorage = new DatabaseEmailStorage();
             $dbStorage->store($email, $result);
-
         } catch (\Exception $ex) {
             Log::error('Failed to store email message: ' . $ex->getMessage());
         }

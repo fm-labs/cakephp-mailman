@@ -2,7 +2,6 @@
 
 namespace Mailman;
 
-
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Routing\Router;
@@ -33,7 +32,6 @@ class MailmanPlugin implements EventListenerInterface
             $routes->connect('/:controller');
             $routes->fallbacks('DashedRoute');
         });
-
     }
 
     public function getBackendMenu(Event $event)

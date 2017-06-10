@@ -79,16 +79,16 @@ class EmailMessagesController extends AppController
     public function view($id = null)
     {
         $this->set('fields', [
-            'headers' => ['formatter' => function($val) {
+            'headers' => ['formatter' => function ($val) {
                 return nl2br($val);
             }],
-            'message' => ['formatter' => function($val) {
+            'message' => ['formatter' => function ($val) {
                 return nl2br($val);
             }],
-            'result_headers' => ['formatter' => function($val) {
+            'result_headers' => ['formatter' => function ($val) {
                 return nl2br($val);
             }],
-            'result_message' => ['formatter' => function($val) {
+            'result_message' => ['formatter' => function ($val) {
                 return nl2br($val);
             }],
         ]);
@@ -107,6 +107,7 @@ class EmailMessagesController extends AppController
             $emailMessage = $this->EmailMessages->patchEntity($emailMessage, $this->request->data);
             if ($this->EmailMessages->save($emailMessage)) {
                 $this->Flash->success(__('The {0} has been saved.', __('email message')));
+
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', __('email message')));
@@ -132,6 +133,7 @@ class EmailMessagesController extends AppController
             $emailMessage = $this->EmailMessages->patchEntity($emailMessage, $this->request->data);
             if ($this->EmailMessages->save($emailMessage)) {
                 $this->Flash->success(__('The {0} has been saved.', __('email message')));
+
                 return $this->redirect(['action' => 'index']);
             } else {
                 $this->Flash->error(__('The {0} could not be saved. Please, try again.', __('email message')));
@@ -157,6 +159,7 @@ class EmailMessagesController extends AppController
         } else {
             $this->Flash->error(__('The {0} could not be deleted. Please, try again.', __('email message')));
         }
+
         return $this->redirect(['action' => 'index']);
     }
 }

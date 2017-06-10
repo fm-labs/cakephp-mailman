@@ -31,7 +31,6 @@ class EmailMessagesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-
         if (Plugin::loaded('Search')) {
             $this->addBehavior('Search.Search');
             $this->searchManager()
@@ -74,7 +73,6 @@ class EmailMessagesTable extends Table
     public function sources($field)
     {
         switch ($field) {
-
         }
     }
 

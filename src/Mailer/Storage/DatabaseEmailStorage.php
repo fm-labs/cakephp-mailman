@@ -2,7 +2,6 @@
 
 namespace Mailman\Mailer\Storage;
 
-
 use Cake\Core\InstanceConfigTrait;
 use Cake\Log\Log;
 use Cake\Mailer\Email;
@@ -57,7 +56,7 @@ class DatabaseEmailStorage
         if ($email->transport()) {
             $transport = explode('\\', get_class($email->transport()));
             $transport = array_pop($transport);
-            $entity->transport = substr($transport , 0, -strlen('Transport'));
+            $entity->transport = substr($transport, 0, -strlen('Transport'));
         }
 
         if (!is_array($transportResult) || empty($transportResult)) {
@@ -66,7 +65,6 @@ class DatabaseEmailStorage
 
             $entity->result_headers = '';
             $entity->result_message = '';
-
         } elseif (isset($transportResult['error'])) {
             $entity->folder = 'outbox';
             $entity->error_code = 1;
@@ -75,7 +73,6 @@ class DatabaseEmailStorage
             $entity->date_delivery = null;
             //$entity->result_headers = $transportResult['headers'];
             $entity->result_message = $transportResult['error'];
-
         } else {
             $entity->folder = 'sent';
             $entity->error_code = 0;
@@ -102,7 +99,7 @@ class DatabaseEmailStorage
 
         if ($withKeys) {
             $_list = [];
-            array_walk($list, function($val, $key) use (&$_list) {
+            array_walk($list, function ($val, $key) use (&$_list) {
                 $_list[] = sprintf("%s: %s", $key, $val);
             });
             $list = $_list;

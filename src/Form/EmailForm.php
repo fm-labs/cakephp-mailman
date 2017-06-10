@@ -43,7 +43,6 @@ class EmailForm extends Form
     protected function _execute(array $data)
     {
 
-
         $email = new Email([
             'transport' => 'default',
             'from' => $data['from'],
@@ -55,6 +54,7 @@ class EmailForm extends Form
         ]);
 
         $mailer = new MailmanMailer();
+
         return $mailer->sendEmail($email, $data['message'], true);
     }
 }

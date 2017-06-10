@@ -8,7 +8,6 @@
 
 namespace Mailman\Controller\Admin;
 
-
 use Mailman\Form\EmailForm;
 
 class EmailComposerController extends AppController

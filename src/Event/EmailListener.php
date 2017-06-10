@@ -2,7 +2,6 @@
 
 namespace Mailman\Event;
 
-
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
@@ -25,6 +24,7 @@ class EmailListener implements EventListenerInterface
         $email = $event->subject();
         if (!($email instanceof Email)) {
             Log::warning("[mailman] Event subject IS NOT an email object");
+
             return;
         }
         Log::info(sprintf('[mailman][email][outbox] %s -> %s: %s', join(',', $email->from()), join(',', $email->to()), $email->subject()), ['email']);
@@ -36,10 +36,10 @@ class EmailListener implements EventListenerInterface
     public function afterSend(Event $event)
     {
         try {
-
             $email = $event->subject();
             if (!($email instanceof Email)) {
                 Log::warning("[mailman] Event subject IS NOT an email object");
+
                 return;
             }
             $result = $event->data();
@@ -50,11 +50,9 @@ class EmailListener implements EventListenerInterface
             $dbStorage->store($email, $result);
 
             Log::info(sprintf('[mailman][email][sent] %s -> %s: %s', join(',', $email->from()), join(',', $email->to()), $email->subject()), ['email']);
-
         } catch (\Exception $ex) {
             Log::error('[mailman][storage][db] Failed to store email message: ' . $ex->getMessage(), ['email']);
         }
-
     }
 
     /**
