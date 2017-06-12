@@ -2,19 +2,16 @@
 namespace Mailman\Model\Table;
 
 use Cake\Core\Plugin;
-use Cake\ORM\Query;
-use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use Mailman\Model\Entity\EmailMessage;
 
 /**
- * EmailMessages Model
+ * Class EmailMessagesTable
  *
+ * @package Mailman\Model\Table
  */
 class EmailMessagesTable extends Table
 {
-
     /**
      * Initialize method
      *
@@ -70,9 +67,13 @@ class EmailMessagesTable extends Table
         }
     }
 
+    /**
+     * @param $field
+     */
     public function sources($field)
     {
         switch ($field) {
+            //@TODO Implement me
         }
     }
 

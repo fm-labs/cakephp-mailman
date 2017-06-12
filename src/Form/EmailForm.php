@@ -3,15 +3,20 @@ namespace Mailman\Form;
 
 use Cake\Form\Form;
 use Cake\Form\Schema;
-use Cake\Log\Log;
 use Cake\Mailer\Email;
-use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
-use Mailman\Mailer\MailmanMailer;
 
+/**
+ * Class EmailForm
+ *
+ * @package Mailman\Form
+ */
 class EmailForm extends Form
 {
-
+    /**
+     * @param Schema $schema
+     * @return $this
+     */
     protected function _buildSchema(Schema $schema)
     {
         return $schema
@@ -22,10 +27,13 @@ class EmailForm extends Form
             ->addField('log', ['type' => 'boolean']);
     }
 
+    /**
+     * @param Validator $validator
+     * @return $this
+     */
     protected function _buildValidator(Validator $validator)
     {
         return $validator
-
             ->add('from', 'notblank', [
                 'rule' => 'notBlank',
             ])
@@ -40,9 +48,14 @@ class EmailForm extends Form
             ]);
     }
 
+    /**
+     * Send email
+     *
+     * @param array $data
+     * @return array
+     */
     protected function _execute(array $data)
     {
-
         $email = new Email([
             'transport' => 'default',
             'from' => $data['from'],
@@ -53,8 +66,6 @@ class EmailForm extends Form
             'log' => true,
         ]);
 
-        $mailer = new MailmanMailer();
-
-        return $mailer->sendEmail($email, $data['message'], true);
+        return $email->send();
     }
 }

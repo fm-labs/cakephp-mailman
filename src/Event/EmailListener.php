@@ -9,6 +9,11 @@ use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Mailman\Mailer\Storage\DatabaseEmailStorage;
 
+/**
+ * Class EmailListener
+ *
+ * @package Mailman\Event
+ */
 class EmailListener implements EventListenerInterface
 {
     /**
@@ -18,6 +23,7 @@ class EmailListener implements EventListenerInterface
 
     /**
      * @param Event $event
+     * @return void
      */
     public function beforeSend(Event $event)
     {
@@ -32,6 +38,7 @@ class EmailListener implements EventListenerInterface
 
     /**
      * @param Event $event
+     * @return void
      */
     public function afterSend(Event $event)
     {
@@ -57,6 +64,7 @@ class EmailListener implements EventListenerInterface
 
     /**
      * @param Event $event
+     * @return void
      */
     public function beforeRender(Event $event)
     {
@@ -74,6 +82,9 @@ class EmailListener implements EventListenerInterface
         }
     }
 
+    /**
+     * @return array
+     */
     public function implementedEvents()
     {
         return [

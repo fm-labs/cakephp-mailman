@@ -2,13 +2,18 @@
 
 namespace Mailman\Mailer;
 
-use Cake\Event\Event;
 use Cake\Log\Log;
 use Cake\Mailer\Exception\MissingActionException;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\Email;
 use Mailman\Mailer\Storage\DatabaseEmailStorage;
 
+/**
+ * Class MailmanMailer
+ *
+ * @package Mailman\Mailer
+ * @deprecated Use CakePHP's built-in Mailer class instead (since CakePHP 3.1)
+ */
 class MailmanMailer extends Mailer
 {
     /**
@@ -20,11 +25,10 @@ class MailmanMailer extends Mailer
      * @return array
      * @throws \Cake\Mailer\Exception\MissingActionException
      * @throws \BadMethodCallException
-     * @observe
+     * @deprecated
      */
     public function send($action, $args = [], $headers = [])
     {
-
         try {
             if (!method_exists($this, $action)) {
                 throw new MissingActionException([
@@ -51,6 +55,7 @@ class MailmanMailer extends Mailer
     /**
      * @param Email $email
      * @return array
+     * @deprecated
      */
     public function sendEmail(Email $email, $content = null, $throwExceptions = false)
     {
@@ -64,6 +69,7 @@ class MailmanMailer extends Mailer
      * @param bool $content
      * @return array
      * @throws \Exception
+     * @deprecated
      */
     protected function _send(Email $email, $content = null, $throwExceptions = false)
     {
@@ -71,9 +77,7 @@ class MailmanMailer extends Mailer
         $result = null;
         $exception = null;
         try {
-            //@TODO dispatch event 'Email.beforeSend'
             $result = $email->send($content);
-            //@TODO dispatch event 'Email.afterSend'
         } catch (\Exception $ex) {
             $result = ['error' => $ex->getMessage()];
             $exception = $ex;

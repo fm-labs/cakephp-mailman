@@ -1,22 +1,27 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: flow
- * Date: 3/6/16
- * Time: 8:47 PM
- */
 
 namespace Mailman\Controller\Admin;
 
 use Mailman\Form\EmailForm;
 
+/**
+ * Class EmailComposerController
+ *
+ * @package Mailman\Controller\Admin
+ */
 class EmailComposerController extends AppController
 {
+    /**
+     * Index action method
+     */
     public function index()
     {
         $this->redirect(['action' => 'compose']);
     }
 
+    /**
+     * Compose email action
+     */
     public function compose()
     {
         $form = new EmailForm();

@@ -4,11 +4,13 @@ namespace Mailman;
 
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
+use Cake\Event\EventManager;
+use Cake\Mailer\Email;
 use Cake\Routing\Router;
+use Mailman\Event\EmailListener;
 
 class MailmanPlugin implements EventListenerInterface
 {
-
     /**
      * Returns a list of events this object is implementing. When the class is registered
      * in an event manager, each individual method will be associated with the respective event.
@@ -45,6 +47,12 @@ class MailmanPlugin implements EventListenerInterface
 
     public function __invoke()
     {
-        \Cake\Event\EventManager::instance()->on(new \Mailman\Event\EmailListener());
+        $configuredTransports = Email::configuredTransport();
+        //debug($configuredTransports);
+        foreach ($configuredTransports as $t) {
+            //debug(Email::configTransport($t));
+        }
+
+        EventManager::instance()->on(new EmailListener());
     }
 }

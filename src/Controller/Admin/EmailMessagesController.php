@@ -2,7 +2,6 @@
 namespace Mailman\Controller\Admin;
 
 use Cake\Mailer\Email;
-use Mailman\Mailer\MailmanMailer;
 
 /**
  * EmailMessages Controller
@@ -11,12 +10,17 @@ use Mailman\Mailer\MailmanMailer;
  */
 class EmailMessagesController extends AppController
 {
-
+    /**
+     * @var array
+     */
     public $paginate = [
         'limit' => 100,
         'order' => ['EmailMessages.id' => 'DESC']
     ];
 
+    /**
+     * @var array
+     */
     public $actions = [
         'index'     => 'Backend.Index',
         'view'      => 'Backend.View',
@@ -25,9 +29,12 @@ class EmailMessagesController extends AppController
         'delete'    => 'Backend.Delete'
     ];
 
+    /**
+     * Send Test email
+     * @TODO Refactor with email form or move to tests
+     */
     public function test()
     {
-
         $email = new Email([
             'transport' => 'default',
             'from' => 'tester@example.org',
@@ -43,8 +50,11 @@ class EmailMessagesController extends AppController
             'log' => true,
         ]);
 
-        $mailer = new MailmanMailer();
-        $mailer->sendEmail($email, true);
+        if (!$email->send()) {
+            $this->Flash->success(__('Email has been sent.'));
+        } else {
+            $this->Flash->error(__('Failed to send email.'));
+        }
 
         $this->setAction('index');
     }
@@ -56,7 +66,6 @@ class EmailMessagesController extends AppController
      */
     public function index()
     {
-
         $this->set('fields.whitelist', [
             //'id',
             'date_delivery',
@@ -99,6 +108,7 @@ class EmailMessagesController extends AppController
      * Add method
      *
      * @return void Redirects on successful add, renders view otherwise.
+     * @todo Use Backend Action instead
      */
     public function add()
     {
@@ -123,6 +133,7 @@ class EmailMessagesController extends AppController
      * @param string|null $id Email Message id.
      * @return void Redirects on successful edit, renders view otherwise.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @todo Use Backend Action instead
      */
     public function edit($id = null)
     {
@@ -149,6 +160,7 @@ class EmailMessagesController extends AppController
      * @param string|null $id Email Message id.
      * @return void Redirects to index.
      * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     * @todo Use Backend Action instead
      */
     public function delete($id = null)
     {

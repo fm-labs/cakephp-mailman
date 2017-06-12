@@ -7,6 +7,11 @@ use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
 
+/**
+ * Class DatabaseEmailStorage
+ *
+ * @package Mailman\Mailer\Storage
+ */
 class DatabaseEmailStorage
 {
     use InstanceConfigTrait;
@@ -23,13 +28,22 @@ class DatabaseEmailStorage
      */
     protected $_table;
 
+    /**
+     * @param array $config
+     */
     public function __construct($config = [])
     {
         $this->config($config);
-
         $this->_table = TableRegistry::get($this->config('model'));
     }
 
+    /**
+     * Store Email instance in database
+     *
+     * @param Email $email
+     * @param null $transportResult
+     * @return bool|\Cake\Datasource\EntityInterface|mixed
+     */
     public function store(Email $email, $transportResult = null)
     {
         // Email instance to EmailMessage entity
@@ -62,9 +76,9 @@ class DatabaseEmailStorage
         if (!is_array($transportResult) || empty($transportResult)) {
             $entity->folder = 'outbox';
             $entity->error_code = 1;
-
             $entity->result_headers = '';
             $entity->result_message = '';
+
         } elseif (isset($transportResult['error'])) {
             $entity->folder = 'outbox';
             $entity->error_code = 1;
@@ -73,6 +87,7 @@ class DatabaseEmailStorage
             $entity->date_delivery = null;
             //$entity->result_headers = $transportResult['headers'];
             $entity->result_message = $transportResult['error'];
+
         } else {
             $entity->folder = 'sent';
             $entity->error_code = 0;
@@ -91,6 +106,12 @@ class DatabaseEmailStorage
         return $result;
     }
 
+    /**
+     * @param $list
+     * @param bool|false $withKeys
+     * @param string $sep
+     * @return array|string
+     */
     protected function _listToString($list, $withKeys = false, $sep = PHP_EOL)
     {
         if (is_string($list)) {
