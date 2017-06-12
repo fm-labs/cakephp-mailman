@@ -63,7 +63,7 @@ class EmailForm extends Form
             'subject' => $data['subject'],
             'template' => false,
             'layout' => false,
-            'log' => true,
+            'log' => $data['log'],
         ]);
 
         return $email->send();

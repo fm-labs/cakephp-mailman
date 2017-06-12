@@ -2,12 +2,15 @@
 
 namespace Mailman;
 
+use Cake\Core\App;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
 use Cake\Mailer\Email;
 use Cake\Routing\Router;
 use Mailman\Event\EmailListener;
+use Mailman\src\Mailer\Transport\MailmanTransport;
+use ReflectionClass;
 
 class MailmanPlugin implements EventListenerInterface
 {
@@ -47,12 +50,32 @@ class MailmanPlugin implements EventListenerInterface
 
     public function __invoke()
     {
-        $configuredTransports = Email::configuredTransport();
-        //debug($configuredTransports);
-        foreach ($configuredTransports as $t) {
-            //debug(Email::configTransport($t));
-        }
+        // inject MailmanTransport into all email transport configs
+        $reflection = new ReflectionClass(Email::class);
+        $property = $reflection->getProperty('_transportConfig');
+        $property->setAccessible(true);
+        $configs = $property->getValue();
 
+        foreach ($configs as $name => &$transport) {
+            if (is_object($transport) && $transport instanceof MailmanTransport) {
+                continue;
+            }
+            if (is_object($transport)) {
+                $configs[$name] = new MailmanTransport([], $transport);
+                continue;
+            }
+
+            $className = App::className($transport['className'], 'Mailer/Transport', 'Transport');
+            if (!$className) {
+                continue;
+            }
+
+            $transport['originalClassName'] = $transport['className'];
+            $transport['className'] = 'Mailman.Mailman';
+        }
+        $property->setValue($configs);
+
+        // attach listeners
         EventManager::instance()->on(new EmailListener());
     }
 }

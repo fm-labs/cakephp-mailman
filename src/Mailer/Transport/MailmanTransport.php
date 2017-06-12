@@ -1,6 +1,6 @@
 <?php
 
-namespace Mailman\src\Mailer\Transport;
+namespace Mailman\Mailer\Transport;
 
 use Cake\Core\App;
 use Cake\Event\Event;
@@ -88,9 +88,9 @@ class MailmanTransport extends AbstractTransport
         }
 
         // re-throw exception, if any
-        if ($exception !== null) {
-            throw $exception;
-        }
+        //if ($exception !== null) {
+        //    throw $exception;
+        //}
 
         return $result;
     }

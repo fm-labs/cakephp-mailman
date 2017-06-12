@@ -33,7 +33,12 @@ class EmailListener implements EventListenerInterface
 
             return;
         }
-        Log::info(sprintf('[mailman][email][outbox] %s -> %s: %s', join(',', $email->from()), join(',', $email->to()), $email->subject()), ['email']);
+
+        Log::info(sprintf('[mailman][email][outbox] %s -> %s: %s',
+            join(',', $email->from()),
+            join(',', $email->to()),
+            $email->subject()
+        ), ['email']);
     }
 
     /**
@@ -56,7 +61,12 @@ class EmailListener implements EventListenerInterface
             $dbStorage = new DatabaseEmailStorage();
             $dbStorage->store($email, $result);
 
-            Log::info(sprintf('[mailman][email][sent] %s -> %s: %s', join(',', $email->from()), join(',', $email->to()), $email->subject()), ['email']);
+            Log::info(sprintf('[mailman][email][sent] %s -> %s: %s',
+                join(',', $email->from()),
+                join(',', $email->to()),
+                $email->subject()
+            ), ['email']);
+
         } catch (\Exception $ex) {
             Log::error('[mailman][storage][db] Failed to store email message: ' . $ex->getMessage(), ['email']);
         }
@@ -65,6 +75,16 @@ class EmailListener implements EventListenerInterface
     /**
      * @param Event $event
      * @return void
+     */
+    public function transportError(Event $event)
+    {
+        $this->afterSend($event);
+    }
+
+    /**
+     * @param Event $event
+     * @return void
+     * @deprecated Use DebugKit plugin instead to debug email messages
      */
     public function beforeRender(Event $event)
     {
@@ -88,9 +108,10 @@ class EmailListener implements EventListenerInterface
     public function implementedEvents()
     {
         return [
-            'Email.beforeSend' => 'beforeSend',
-            'Email.afterSend' => 'afterSend',
-            'Controller.beforeRender' => 'beforeRender'
+            'Email.beforeSend'          => 'beforeSend',
+            'Email.afterSend'           => 'afterSend',
+            'Email.transportError'      => 'transportError',
+            'Controller.beforeRender'   => 'beforeRender'
         ];
     }
 }

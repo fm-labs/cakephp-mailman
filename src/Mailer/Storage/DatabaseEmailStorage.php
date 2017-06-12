@@ -11,6 +11,7 @@ use Cake\ORM\TableRegistry;
  * Class DatabaseEmailStorage
  *
  * @package Mailman\Mailer\Storage
+ * @todo Refactor as Log engine
  */
 class DatabaseEmailStorage
 {
@@ -100,7 +101,7 @@ class DatabaseEmailStorage
 
         $result = $this->_table->save($entity);
         if (!$result) {
-            Log::alert(sprintf("Mailman DatabaseEmailStorage failed to store EmailMessage"), ['mailman', 'email']);
+            Log::alert(sprintf("Failed to store message in database"), ['mailman', 'email']);
         }
 
         return $result;
