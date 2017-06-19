@@ -7,20 +7,21 @@ use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
 use Cake\Mailer\Email;
+use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Mailman\Event\EmailListener;
-use Mailman\src\Mailer\Transport\MailmanTransport;
+use Mailman\Mailer\Transport\MailmanTransport;
 use ReflectionClass;
 
+/**
+ * Class MailmanPlugin
+ *
+ * @package Mailman
+ */
 class MailmanPlugin implements EventListenerInterface
 {
     /**
-     * Returns a list of events this object is implementing. When the class is registered
-     * in an event manager, each individual method will be associated with the respective event.
-     *
-     * @see EventListenerInterface::implementedEvents()
-     * @return array associative array or event key names pointing to the function
-     * that should be called in the object when the respective event is fired
+     * @return array
      */
     public function implementedEvents()
     {
@@ -30,15 +31,23 @@ class MailmanPlugin implements EventListenerInterface
         ];
     }
 
+    /**
+     * Backend routes
+     */
     public function buildBackendRoutes()
     {
         // Admin routes
-        Router::scope('/mailman/admin', ['plugin' => 'Mailman', 'prefix' => 'admin', '_namePrefix' => 'mailman:admin:'], function ($routes) {
-            $routes->connect('/:controller');
-            $routes->fallbacks('DashedRoute');
-        });
+        Router::scope('/mailman/admin',
+            ['plugin' => 'Mailman', 'prefix' => 'admin', '_namePrefix' => 'mailman:admin:'],
+            function (RouteBuilder $routes) {
+                $routes->connect('/:controller');
+                $routes->fallbacks('DashedRoute');
+            });
     }
 
+    /**
+     * @param Event $event
+     */
     public function getBackendMenu(Event $event)
     {
         $event->subject()->addItem([
@@ -48,6 +57,9 @@ class MailmanPlugin implements EventListenerInterface
         ]);
     }
 
+    /**
+     * Run Mailman plugin
+     */
     public function __invoke()
     {
         // inject MailmanTransport into all email transport configs
