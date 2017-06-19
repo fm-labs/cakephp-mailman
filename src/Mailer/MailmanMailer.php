@@ -2,11 +2,11 @@
 
 namespace Mailman\Mailer;
 
-use Cake\Log\Log;
+//use Cake\Log\Log;
 use Cake\Mailer\Exception\MissingActionException;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\Email;
-use Mailman\Mailer\Storage\DatabaseEmailStorage;
+//use Mailman\Mailer\Storage\DatabaseEmailStorage;
 
 /**
  * Class MailmanMailer
@@ -25,7 +25,6 @@ class MailmanMailer extends Mailer
      * @return array
      * @throws \Cake\Mailer\Exception\MissingActionException
      * @throws \BadMethodCallException
-     * @deprecated
      */
     public function send($action, $args = [], $headers = [])
     {
@@ -44,12 +43,12 @@ class MailmanMailer extends Mailer
 
             call_user_func_array([$this, $action], $args);
 
-            $result = $this->_send($this->_email);
+            return $this->_send($this->_email);
+
         } finally {
             $this->reset();
         }
 
-        return $result;
     }
 
     /**
@@ -83,12 +82,13 @@ class MailmanMailer extends Mailer
             $exception = $ex;
         }
 
-        try {
-            $dbStorage = new DatabaseEmailStorage();
-            $dbStorage->store($email, $result);
-        } catch (\Exception $ex) {
-            Log::error('Failed to store email message: ' . $ex->getMessage());
-        }
+        //@TODO Remove unused code (Already reimplemented in EmailListener)
+        //try {
+        //    $dbStorage = new DatabaseEmailStorage();
+        //    $dbStorage->store($email, $result);
+        //} catch (\Exception $ex) {
+        //    Log::error('Failed to store email message: ' . $ex->getMessage());
+        //}
 
         if ($exception !== null && $throwExceptions) {
             throw $exception;

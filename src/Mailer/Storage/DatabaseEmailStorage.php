@@ -6,6 +6,7 @@ use Cake\Core\InstanceConfigTrait;
 use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
+use Mailman\Mailer\Transport\MailmanTransport;
 
 /**
  * Class DatabaseEmailStorage
@@ -69,9 +70,14 @@ class DatabaseEmailStorage
         ]);
 
         if ($email->transport()) {
-            $transport = explode('\\', get_class($email->transport()));
-            $transport = array_pop($transport);
-            $entity->transport = substr($transport, 0, -strlen('Transport'));
+            $transport = $email->transport();
+            if ($transport instanceof MailmanTransport && isset($transport->originalTransport)) {
+                $transport = $transport->originalTransport;
+            }
+
+            $transportName = explode('\\', get_class($transport));
+            $transportName = array_pop($transportName);
+            $entity->transport = substr($transportName, 0, -strlen('Transport'));
         }
 
         if (!is_array($transportResult) || empty($transportResult)) {
