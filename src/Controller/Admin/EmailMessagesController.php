@@ -75,7 +75,7 @@ class EmailMessagesController extends AppController
             'to',
             'subject'
         ]);
-        $this->Backend->executeAction();
+        $this->Action->execute();
     }
 
     /**
@@ -101,7 +101,7 @@ class EmailMessagesController extends AppController
                 return nl2br($val);
             }],
         ]);
-        $this->Backend->executeAction();
+        $this->Action->execute();
     }
 
     /**
