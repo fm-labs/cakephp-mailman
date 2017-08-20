@@ -24,7 +24,7 @@ class EmailMessagesController extends AppController
     public $actions = [
         'index'     => 'Backend.Index',
         'view'      => 'Backend.View',
-        'add'       => 'Backend.Add',
+        'add'       => false,
         'edit'      => 'Backend.Edit',
         'delete'    => 'Backend.Delete'
     ];
@@ -75,6 +75,9 @@ class EmailMessagesController extends AppController
             'to',
             'subject'
         ]);
+        $this->set('actions', [
+            'compose' => [__('Compose Email'), ['controller' => 'EmailComposer', 'action' => 'compose'], ['data-icon' => 'envelope-o']]
+        ]);
         $this->Action->execute();
     }
 
@@ -101,6 +104,7 @@ class EmailMessagesController extends AppController
                 return nl2br($val);
             }],
         ]);
+
         $this->Action->execute();
     }
 
