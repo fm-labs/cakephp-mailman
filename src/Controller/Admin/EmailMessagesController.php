@@ -1,6 +1,7 @@
 <?php
 namespace Mailman\Controller\Admin;
 
+use Backend\Controller\BackendActionsTrait;
 use Cake\Mailer\Email;
 
 /**
@@ -10,6 +11,8 @@ use Cake\Mailer\Email;
  */
 class EmailMessagesController extends AppController
 {
+    use BackendActionsTrait;
+
     /**
      * @var array
      */
@@ -24,9 +27,9 @@ class EmailMessagesController extends AppController
     public $actions = [
         'index'     => 'Backend.Index',
         'view'      => 'Backend.View',
-        'add'       => false,
+        //'add'       => false,
         'edit'      => 'Backend.Edit',
-        'delete'    => 'Backend.Delete'
+        'delete'    => 'Backend.Delete',
     ];
 
     /**
@@ -68,12 +71,12 @@ class EmailMessagesController extends AppController
     {
         $this->set('fields.whitelist', [
             //'id',
-            'date_delivery',
             'folder',
-            'transport',
-            'from',
+            'subject',
             'to',
-            'subject'
+            'from',
+            'transport',
+            'date_delivery',
         ]);
         $this->set('actions', [
             'compose' => [__('Compose Email'), ['controller' => 'EmailComposer', 'action' => 'compose'], ['data-icon' => 'envelope-o']]
@@ -113,7 +116,6 @@ class EmailMessagesController extends AppController
      *
      * @return void Redirects on successful add, renders view otherwise.
      * @todo Use Backend Action instead
-     */
     public function add()
     {
         $emailMessage = $this->EmailMessages->newEntity();
@@ -130,6 +132,7 @@ class EmailMessagesController extends AppController
         $this->set(compact('emailMessage'));
         $this->set('_serialize', ['emailMessage']);
     }
+    */
 
     /**
      * Edit method
@@ -160,22 +163,9 @@ class EmailMessagesController extends AppController
 
     /**
      * Delete method
-     *
-     * @param string|null $id Email Message id.
-     * @return void Redirects to index.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     * @todo Use Backend Action instead
      */
     public function delete($id = null)
     {
-        $this->request->allowMethod(['post', 'delete']);
-        $emailMessage = $this->EmailMessages->get($id);
-        if ($this->EmailMessages->delete($emailMessage)) {
-            $this->Flash->success(__('The {0} has been deleted.', __('email message')));
-        } else {
-            $this->Flash->error(__('The {0} could not be deleted. Please, try again.', __('email message')));
-        }
-
-        return $this->redirect(['action' => 'index']);
+        $this->Action->execute();
     }
 }
