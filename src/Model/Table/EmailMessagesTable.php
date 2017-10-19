@@ -31,6 +31,15 @@ class EmailMessagesTable extends Table
         if (Plugin::loaded('Search')) {
             $this->addBehavior('Search.Search');
             $this->searchManager()
+                ->add('q', 'Search.Like', [
+                    'before' => true,
+                    'after' => true,
+                    'fieldMode' => 'OR',
+                    'comparison' => 'LIKE',
+                    'wildcardAny' => '*',
+                    'wildcardOne' => '?',
+                    'field' => ['to', 'from', 'subject']
+                ])
                 ->add('from', 'Search.Like', [
                     'before' => true,
                     'after' => true,

@@ -25,7 +25,9 @@ class EmailMessagesController extends AppController
      * @var array
      */
     public $actions = [
-        'index'     => 'Backend.Index',
+        //'indexfoo'  => 'Backend.FooTableIndex',
+        //'indexdt'   => 'Backend.DataTableIndex',
+        'index'     => 'Backend.FooTableIndex',
         'view'      => 'Backend.View',
         //'add'       => false,
         'edit'      => 'Backend.Edit',
@@ -69,8 +71,26 @@ class EmailMessagesController extends AppController
      */
     public function index()
     {
+        $this->paginate = [];
+
+        //$this->set('paginate', true);
+        //$this->set('sortable', true);
+        //$this->set('filter', true);
+        //$this->set('ajax', true);
+        //$this->set('order', ['id' => 'desc']);
+
+        $this->set([
+            'paginate' => true,
+            'sortable' => true,
+            'filter' => false,
+            'ajax' => true,
+            'query' => [
+                //'limit' => 25
+                'order' => ['EmailMessages.id' => 'desc']
+            ]
+        ]);
         $this->set('fields.whitelist', [
-            //'id',
+            'id',
             'folder',
             'subject',
             'to',
@@ -82,6 +102,29 @@ class EmailMessagesController extends AppController
             'compose' => [__('Compose Email'), ['controller' => 'EmailComposer', 'action' => 'compose'], ['data-icon' => 'envelope-o']]
         ]);
         $this->Action->execute();
+    }
+
+    /**
+     * Index method
+     *
+     * @return void
+     */
+    public function index2()
+    {
+        $this->set('fields.whitelist', [
+            'id',
+            'folder',
+            'subject',
+            'to',
+            'from',
+            'transport',
+            'date_delivery',
+        ]);
+        $this->set('actions', [
+            'compose' => [__('Compose Email'), ['controller' => 'EmailComposer', 'action' => 'compose'], ['data-icon' => 'envelope-o']]
+        ]);
+        $this->Action->execute();
+        $this->render('Backend.index');
     }
 
     /**
