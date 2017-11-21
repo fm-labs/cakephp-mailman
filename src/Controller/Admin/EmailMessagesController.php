@@ -13,6 +13,8 @@ class EmailMessagesController extends AppController
 {
     use BackendActionsTrait;
 
+    public $modelClass = "Mailman.EmailMessages";
+
     /**
      * @var array
      */
@@ -25,12 +27,8 @@ class EmailMessagesController extends AppController
      * @var array
      */
     public $actions = [
-        //'indexfoo'  => 'Backend.FooTableIndex',
-        //'indexdt'   => 'Backend.DataTableIndex',
-        'index'     => 'Backend.FooTableIndex',
+        'index'     => 'Backend.Index',
         'view'      => 'Backend.View',
-        //'add'       => false,
-        'edit'      => 'Backend.Edit',
         'delete'    => 'Backend.Delete',
     ];
 
@@ -73,58 +71,28 @@ class EmailMessagesController extends AppController
     {
         $this->paginate = [];
 
-        //$this->set('paginate', true);
-        //$this->set('sortable', true);
-        //$this->set('filter', true);
-        //$this->set('ajax', true);
-        //$this->set('order', ['id' => 'desc']);
-
         $this->set([
             'paginate' => true,
-            'sortable' => true,
+            'sortable' => false,
             'filter' => false,
-            'ajax' => true,
+            'ajax' => false,
             'query' => [
-                //'limit' => 25
+                //'limit' => 25,
+                'contain' => [],
+                'fields' => ['id', 'subject', 'to', 'date_delivery'],
                 'order' => ['EmailMessages.id' => 'desc']
+            ],
+            'fields.whitelist' => [
+                //'id',
+                //'folder',
+                'subject',
+                'to',
+                //'from',
+                //'transport',
+                'date_delivery',
             ]
         ]);
-        $this->set('fields.whitelist', [
-            'id',
-            'folder',
-            'subject',
-            'to',
-            'from',
-            'transport',
-            'date_delivery',
-        ]);
-        $this->set('actions', [
-            'compose' => [__('Compose Email'), ['controller' => 'EmailComposer', 'action' => 'compose'], ['data-icon' => 'envelope-o']]
-        ]);
         $this->Action->execute();
-    }
-
-    /**
-     * Index method
-     *
-     * @return void
-     */
-    public function index2()
-    {
-        $this->set('fields.whitelist', [
-            'id',
-            'folder',
-            'subject',
-            'to',
-            'from',
-            'transport',
-            'date_delivery',
-        ]);
-        $this->set('actions', [
-            'compose' => [__('Compose Email'), ['controller' => 'EmailComposer', 'action' => 'compose'], ['data-icon' => 'envelope-o']]
-        ]);
-        $this->Action->execute();
-        $this->render('Backend.index');
     }
 
     /**
@@ -152,56 +120,6 @@ class EmailMessagesController extends AppController
         ]);
 
         $this->Action->execute();
-    }
-
-    /**
-     * Add method
-     *
-     * @return void Redirects on successful add, renders view otherwise.
-     * @todo Use Backend Action instead
-    public function add()
-    {
-        $emailMessage = $this->EmailMessages->newEntity();
-        if ($this->request->is('post')) {
-            $emailMessage = $this->EmailMessages->patchEntity($emailMessage, $this->request->data);
-            if ($this->EmailMessages->save($emailMessage)) {
-                $this->Flash->success(__('The {0} has been saved.', __('email message')));
-
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The {0} could not be saved. Please, try again.', __('email message')));
-            }
-        }
-        $this->set(compact('emailMessage'));
-        $this->set('_serialize', ['emailMessage']);
-    }
-    */
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Email Message id.
-     * @return void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     * @todo Use Backend Action instead
-     */
-    public function edit($id = null)
-    {
-        $emailMessage = $this->EmailMessages->get($id, [
-            'contain' => []
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $emailMessage = $this->EmailMessages->patchEntity($emailMessage, $this->request->data);
-            if ($this->EmailMessages->save($emailMessage)) {
-                $this->Flash->success(__('The {0} has been saved.', __('email message')));
-
-                return $this->redirect(['action' => 'index']);
-            } else {
-                $this->Flash->error(__('The {0} could not be saved. Please, try again.', __('email message')));
-            }
-        }
-        $this->set(compact('emailMessage'));
-        $this->set('_serialize', ['emailMessage']);
     }
 
     /**

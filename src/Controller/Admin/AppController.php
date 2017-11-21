@@ -17,5 +17,6 @@ class AppController extends Controller
     public function initialize()
     {
         $this->loadComponent('Backend.Backend');
+        $this->loadComponent('Backend.Action');
     }
 }
