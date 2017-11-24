@@ -79,8 +79,8 @@ class EmailMessagesController extends AppController
             'query' => [
                 //'limit' => 25,
                 'contain' => [],
-                'fields' => ['id', 'subject', 'to', 'date_delivery'],
-                'order' => ['EmailMessages.id' => 'desc']
+                'fields' => ['id', 'subject', 'to', 'date_delivery', 'transport'],
+                'order' => ['EmailMessages.id' => 'desc'],
             ],
             'fields.whitelist' => [
                 //'id',
@@ -88,8 +88,8 @@ class EmailMessagesController extends AppController
                 'subject',
                 'to',
                 //'from',
-                //'transport',
                 'date_delivery',
+                'transport',
             ]
         ]);
         $this->Action->execute();
