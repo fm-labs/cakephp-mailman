@@ -68,7 +68,7 @@ class MailmanPlugin implements EventListenerInterface
         $property->setAccessible(true);
         $configs = $property->getValue();
 
-        foreach ($configs as $name => &$transport) {
+        foreach ((array) $configs as $name => &$transport) {
             if (is_object($transport) && $transport instanceof MailmanTransport) {
                 continue;
             }
