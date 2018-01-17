@@ -2,6 +2,7 @@
 
 namespace Mailman;
 
+use Backend\Event\RouteBuilderEvent;
 use Cake\Core\App;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
@@ -34,13 +35,13 @@ class MailmanPlugin implements EventListenerInterface
     /**
      * Backend routes
      */
-    public function buildBackendRoutes()
+    public function buildBackendRoutes(RouteBuilderEvent $event)
     {
         // Admin routes
-        Router::scope('/mailman/admin',
+        $event->subject()->scope('/mailman',
             ['plugin' => 'Mailman', 'prefix' => 'admin', '_namePrefix' => 'mailman:admin:'],
             function (RouteBuilder $routes) {
-                $routes->connect('/:controller');
+                //$routes->connect('/:controller');
                 $routes->fallbacks('DashedRoute');
             });
     }
