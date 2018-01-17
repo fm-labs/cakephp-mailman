@@ -106,6 +106,6 @@
         <!-- /.col -->
     </div>
 
-    <?php debug($dataTable); ?>
-    <?php debug($result); ?>
+    <?php //debug($dataTable); ?>
+    <?php //debug($result); ?>
 </div>
