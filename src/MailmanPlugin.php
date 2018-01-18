@@ -27,7 +27,7 @@ class MailmanPlugin implements EventListenerInterface
     public function implementedEvents()
     {
         return [
-            'Backend.Menu.get' => 'getBackendMenu',
+            'Backend.Sidebar.get' => 'getBackendSidebarMenu',
             'Backend.Routes.build' => 'buildBackendRoutes'
         ];
     }
@@ -49,7 +49,7 @@ class MailmanPlugin implements EventListenerInterface
     /**
      * @param Event $event
      */
-    public function getBackendMenu(Event $event)
+    public function getBackendSidebarMenu(Event $event)
     {
         $event->subject()->addItem([
             'title' => 'Mailman',
