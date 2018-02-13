@@ -27,7 +27,7 @@ class MailmanPlugin implements EventListenerInterface
     public function implementedEvents()
     {
         return [
-            'Backend.Sidebar.get' => 'getBackendSidebarMenu',
+            'Backend.SysMenu.build' => 'buildBackendSystemMenu',
             'Backend.Routes.build' => 'buildBackendRoutes'
         ];
     }
@@ -49,7 +49,7 @@ class MailmanPlugin implements EventListenerInterface
     /**
      * @param Event $event
      */
-    public function getBackendSidebarMenu(Event $event)
+    public function buildBackendSystemMenu(Event $event)
     {
         $event->subject()->addItem([
             'title' => 'Mailman',
@@ -69,23 +69,29 @@ class MailmanPlugin implements EventListenerInterface
         $property->setAccessible(true);
         $configs = $property->getValue();
 
-        foreach ((array) $configs as $name => &$transport) {
+        $configs = array_map(function($transport) {
+
             if (is_object($transport) && $transport instanceof MailmanTransport) {
-                continue;
+                return $transport;
             }
+
             if (is_object($transport)) {
-                $configs[$name] = new MailmanTransport([], $transport);
-                continue;
+                $transport = new MailmanTransport([], $transport);
+                return $transport;
             }
 
             $className = App::className($transport['className'], 'Mailer/Transport', 'Transport');
             if (!$className) {
-                continue;
+                debug("Mailer Transport Class not found: " . $transport['className']);
+                return $transport;
             }
 
             $transport['originalClassName'] = $transport['className'];
             $transport['className'] = 'Mailman.Mailman';
-        }
+
+            return $transport;
+        }, $configs);
+
         $property->setValue($configs);
 
         // attach listeners
