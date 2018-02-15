@@ -1,9 +1,5 @@
 <?php $this->Breadcrumbs->add(__('New {0}', __('Email Message'))); ?>
-<?php $this->Toolbar->addLink(
-    __('List {0}', __('Email Messages')),
-    ['controller' => 'EmailMessages', 'action' => 'index'],
-    ['data-icon' => 'list']
-) ?>
+<?php $this->assign('title', __('Compose Email')); ?>
 <div class="form">
     <?= $this->Form->create($emailForm, ['class' => 'no-ajax']); ?>
     <?php

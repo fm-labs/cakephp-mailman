@@ -82,13 +82,19 @@ class EmailMessagesController extends AppController
                 'fields' => ['id', 'subject', 'to', 'date_delivery', 'transport'],
                 'order' => ['EmailMessages.id' => 'desc'],
             ],
+            'fields' => [
+                'date_delivery' => [],
+                'to' => [],
+                'subject' => [],
+                'transport' => [],
+            ],
             'fields.whitelist' => [
                 //'id',
                 //'folder',
+                'date_delivery',
                 'subject',
                 'to',
                 //'from',
-                'date_delivery',
                 'transport',
             ]
         ]);

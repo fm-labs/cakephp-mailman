@@ -3,11 +3,12 @@
 <?php $this->Breadcrumbs->add(__('Email Messages')); ?>
 <div class="emailMessages index">
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-3" style="display: none">
             <?= $this->Button->link(__('Compose'),
                 ['controller' => 'EmailComposer', 'action' => 'compose'],
                 ['type' => 'primary', 'class' => 'btn-block margin-bottom']); ?>
 
+            <!--
             <div class="box box-solid">
                 <div class="box-header with-border">
                     <h3 class="box-title">Folders</h3>
@@ -28,8 +29,9 @@
                         <li><a href="#"><i class="fa fa-trash-o"></i> Trash</a></li>
                     </ul>
                 </div>
-                <!-- /.box-body -->
             </div>
+                -->
+                <!-- /.box-body -->
             <!-- /. box -->
             <!--
             <div class="box box-solid">
@@ -52,7 +54,7 @@
             <!-- /.box -->
         </div>
         <!-- /.col -->
-        <div class="col-md-9">
+        <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Messages</h3>

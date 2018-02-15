@@ -3,6 +3,8 @@
 namespace Mailman;
 
 use Backend\Event\RouteBuilderEvent;
+use Backend\View\BackendView;
+use Banana\Menu\Menu;
 use Cake\Core\App;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
@@ -28,7 +30,8 @@ class MailmanPlugin implements EventListenerInterface
     {
         return [
             'Backend.SysMenu.build' => 'buildBackendSystemMenu',
-            'Backend.Routes.build' => 'buildBackendRoutes'
+            'Backend.Routes.build' => 'buildBackendRoutes',
+            'View.beforeLayout' => ['callable' => 'beforeLayout']
         ];
     }
 
@@ -44,6 +47,30 @@ class MailmanPlugin implements EventListenerInterface
                 //$routes->connect('/:controller');
                 $routes->fallbacks('DashedRoute');
             });
+    }
+
+    public function beforeLayout(Event $event)
+    {
+        if ($event->subject() instanceof BackendView && $event->subject()->plugin == "Mailman") {
+            $menu = new Menu($this->_getMenuItems());
+            $event->subject()->set('backend.sidebar.menu', $menu);
+        }
+    }
+
+    protected function _getMenuItems()
+    {
+        return [
+            'compose' => [
+                'title' => __('Compose Email'),
+                'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'composer'],
+                'data-icon' => 'envelope-open'
+            ],
+            'history' => [
+                'title' => __('Email History'),
+                'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
+                'data-icon' => 'history'
+            ]
+        ];
     }
 
     /**
