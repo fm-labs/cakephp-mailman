@@ -62,7 +62,7 @@ class MailmanPlugin implements EventListenerInterface
         return [
             'compose' => [
                 'title' => __('Compose Email'),
-                'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'composer'],
+                'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
                 'data-icon' => 'envelope-open'
             ],
             'history' => [
