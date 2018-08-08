@@ -98,6 +98,12 @@ class EmailMessagesController extends AppController
                 'transport',
             ]
         ]);
+
+//        $this->Action->registerExternal('compose', [
+//            'label' => 'Compose Message',
+//            'url' =>  ['controller' => 'EmailComposer', 'action' => 'compose'],
+//            'scope' => ['index']
+//        ]);
         $this->Action->execute();
     }
 

@@ -2,13 +2,19 @@
 
 namespace Mailman;
 
+use Backend\Backend;
+use Backend\BackendPluginInterface;
 use Backend\Event\RouteBuilderEvent;
 use Backend\View\BackendView;
+use Banana\Application;
 use Banana\Menu\Menu;
+use Banana\Plugin\PluginInterface;
 use Cake\Core\App;
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
+use Cake\Http\MiddlewareQueue;
 use Cake\Mailer\Email;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
@@ -21,7 +27,7 @@ use ReflectionClass;
  *
  * @package Mailman
  */
-class MailmanPlugin implements EventListenerInterface
+class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventListenerInterface
 {
     /**
      * @return array
@@ -29,66 +35,36 @@ class MailmanPlugin implements EventListenerInterface
     public function implementedEvents()
     {
         return [
-            'Backend.SysMenu.build' => 'buildBackendSystemMenu',
-            'Backend.Routes.build' => 'buildBackendRoutes',
-            'View.beforeLayout' => ['callable' => 'beforeLayout']
-        ];
-    }
-
-    /**
-     * Backend routes
-     */
-    public function buildBackendRoutes(RouteBuilderEvent $event)
-    {
-        // Admin routes
-        $event->subject()->scope('/mailman',
-            ['plugin' => 'Mailman', 'prefix' => 'admin', '_namePrefix' => 'mailman:admin:'],
-            function (RouteBuilder $routes) {
-                //$routes->connect('/:controller');
-                $routes->fallbacks('DashedRoute');
-            });
-    }
-
-    public function beforeLayout(Event $event)
-    {
-        if ($event->subject() instanceof BackendView && $event->subject()->plugin == "Mailman") {
-            $menu = new Menu($this->_getMenuItems());
-            $event->subject()->set('backend.sidebar.menu', $menu);
-        }
-    }
-
-    protected function _getMenuItems()
-    {
-        return [
-            'compose' => [
-                'title' => __('Compose Email'),
-                'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
-                'data-icon' => 'envelope-open'
-            ],
-            'history' => [
-                'title' => __('Email History'),
-                'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
-                'data-icon' => 'history'
-            ]
+            'Backend.Sidebar.build' => 'buildBackendMenu',
         ];
     }
 
     /**
      * @param Event $event
      */
-    public function buildBackendSystemMenu(Event $event)
+    public function buildBackendMenu(Event $event)
     {
         $event->subject()->addItem([
             'title' => 'Mailman',
             'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
             'data-icon' => 'envelope-o',
+            'children' => [
+                'compose' => [
+                    'title' => __('Compose Email'),
+                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
+                    'data-icon' => 'envelope-open'
+                ],
+                'history' => [
+                    'title' => __('Email History'),
+                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
+                    'data-icon' => 'history'
+                ]
+            ]
         ]);
     }
 
-    /**
-     * Run Mailman plugin
-     */
-    public function __invoke()
+
+    public function bootstrap(Application $app)
     {
         // inject MailmanTransport into all email transport configs
         $reflection = new ReflectionClass(Email::class);
@@ -123,5 +99,26 @@ class MailmanPlugin implements EventListenerInterface
 
         // attach listeners
         EventManager::instance()->on(new EmailListener());
+    }
+
+    public function routes(RouteBuilder $routes)
+    {
+
+    }
+
+    public function middleware(MiddlewareQueue $middleware)
+    {
+
+    }
+
+    public function backendBootstrap(Backend $backend)
+    {
+        EventManager::instance()->on($this);
+    }
+
+    public function backendRoutes(RouteBuilder $routes)
+    {
+        // Admin routes
+        $routes->fallbacks('DashedRoute');
     }
 }
