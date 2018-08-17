@@ -93,9 +93,9 @@ class EmailListener implements EventListenerInterface
             if ($event->subject()->components()->has('Flash')) {
                 foreach ($this->_emails as $email) {
                     if (isset($email['error'])) {
-                        $event->subject()->components()->get('Flash')->error('Email sending failed: ' . $email['error']);
+                        $event->subject()->components()->get('Flash')->error('EmailListener: Email sending failed: ' . $email['error']);
                     } else {
-                        $event->subject()->components()->get('Flash')->success('Email sent: ' . $email['message']);
+                        $event->subject()->components()->get('Flash')->success('EmailListener: Email sent: ' . $email['message']);
                     }
                 }
             }
