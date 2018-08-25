@@ -75,22 +75,22 @@ class MailmanTransport extends AbstractTransport
 
             $result = $this->originalTransport->send($email);
 
+            // dispatch `Email.afterSend` event
+            EventManager::instance()->dispatch(new Event('Email.afterSend', $email, $result));
+
         } catch (\Exception $ex) {
-            $exception = $ex;
+            //$exception = $ex;
             $result = ['error' => $ex->getMessage()];
 
-            // dispacth `Email.transportError` event
+            // dispatch `Email.transportError` event
             EventManager::instance()->dispatch(new Event('Email.transportError', $email, $result));
 
         } finally {
-            // dispacth `Email.afterSend` event
-            EventManager::instance()->dispatch(new Event('Email.afterSend', $email, $result));
+            // re-throw exception, if any
+            //if ($exception !== null) {
+            //    throw $exception;
+            //}
         }
-
-        // re-throw exception, if any
-        //if ($exception !== null) {
-        //    throw $exception;
-        //}
 
         return $result;
     }

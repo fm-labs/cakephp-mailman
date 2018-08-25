@@ -50,23 +50,22 @@ class DatabaseEmailStorage
     {
         // Email instance to EmailMessage entity
         $entity = $this->_table->newEntity([
-            'folder' => 'sent',
-            'from' => $this->_listToString($email->from()),
-            'sender' => $this->_listToString($email->sender()),
-            'to' => $this->_listToString($email->to()),
-            'cc' => $this->_listToString($email->cc()),
-            'bcc' => $this->_listToString($email->bcc()),
-            'reply_to' => $this->_listToString($email->replyTo()),
-            'read_receipt' => $this->_listToString($email->readReceipt()),
-            'subject' => $email->subject(),
-            'headers' => $this->_listToString($email->getHeaders(), true),
-            'message' => $this->_listToString($email->message()),
-            'charset' => $email->charset(),
-            'error_code' => 0,
+            'charset'       => $email->charset(),
+            'subject'       => $email->getOriginalSubject(),
+            'from'          => $this->_listToString($email->from()),
+            'sender'        => $this->_listToString($email->sender()),
+            'to'            => $this->_listToString($email->to()),
+            'cc'            => $this->_listToString($email->cc()),
+            'bcc'           => $this->_listToString($email->bcc()),
+            'reply_to'      => $this->_listToString($email->replyTo()),
+            'read_receipt'  => $this->_listToString($email->readReceipt()),
+            'headers'       => $this->_listToString($email->getHeaders(), true),
+            'message'       => $this->_listToString($email->message()),
+            'folder'        => 'sent',
+            'error_code'    => 0,
             'error_message' => '',
-            'sent' => 0,
+            'sent'          => 0,
             'date_delivery' => null
-
         ]);
 
         if ($email->transport()) {
@@ -82,14 +81,15 @@ class DatabaseEmailStorage
 
         if (!is_array($transportResult) || empty($transportResult)) {
             $entity->folder = 'outbox';
-            $entity->error_code = 1;
+            $entity->error_code = 1; // Malformed or empty transport result
+            $entity->error_msg = 'Malformed Result';
             $entity->result_headers = '';
             $entity->result_message = '';
 
         } elseif (isset($transportResult['error'])) {
             $entity->folder = 'outbox';
-            $entity->error_code = 1;
-            $entity->error_message = $transportResult['error'];
+            $entity->error_code = 2; // Transport error
+            $entity->error_msg = $transportResult['error'];
             $entity->sent = 0;
             $entity->date_delivery = null;
             //$entity->result_headers = $transportResult['headers'];

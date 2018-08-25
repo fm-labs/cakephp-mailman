@@ -79,7 +79,7 @@ class EmailMessagesController extends AppController
             'query' => [
                 //'limit' => 25,
                 'contain' => [],
-                'fields' => ['id', 'subject', 'to', 'date_delivery', 'transport'],
+                'fields' => ['id', 'subject', 'to', 'date_delivery', 'transport','sent','error_code','error_msg'],
                 'order' => ['EmailMessages.id' => 'desc'],
             ],
             'fields' => [
@@ -87,6 +87,8 @@ class EmailMessagesController extends AppController
                 'to' => [],
                 'subject' => [],
                 'transport' => [],
+                'sent' => [],
+                'error_code' => []
             ],
             'fields.whitelist' => [
                 //'id',
@@ -96,6 +98,8 @@ class EmailMessagesController extends AppController
                 'to',
                 //'from',
                 'transport',
+                'sent',
+                'error_code',
             ]
         ]);
 
@@ -121,14 +125,15 @@ class EmailMessagesController extends AppController
                 return nl2br($val);
             }],
             'message' => ['formatter' => function ($val) {
-                return nl2br($val);
+                return '<pre>' . h($val) . '</pre>';
             }],
             'result_headers' => ['formatter' => function ($val) {
                 return nl2br($val);
             }],
             'result_message' => ['formatter' => function ($val) {
-                return nl2br($val);
+                return '<pre>' . h($val) . '</pre>';
             }],
+            'sent' => []
         ]);
 
         $this->Action->execute();
