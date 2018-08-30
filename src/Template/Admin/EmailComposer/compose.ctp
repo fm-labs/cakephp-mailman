@@ -1,4 +1,4 @@
-<?php $this->Breadcrumbs->add(__('New {0}', __('Email Message'))); ?>
+<?php // $this->Breadcrumbs->add(__('New {0}', __('Email Message'))); ?>
 <?php $this->assign('title', __('Compose Email')); ?>
 <div class="form">
     <?= $this->Form->create($emailForm, ['class' => 'no-ajax']); ?>

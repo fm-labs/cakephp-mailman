@@ -1,6 +1,6 @@
 <?php $this->loadHelper('Backend.DataTable'); ?>
 <?php $this->loadHelper('Bootstrap.Button'); ?>
-<?php $this->Breadcrumbs->add(__('Email Messages')); ?>
+<?php //$this->Breadcrumbs->add(__('Email Messages')); ?>
 <div class="emailMessages index">
     <div class="row">
         <div class="col-md-3" style="display: none">
