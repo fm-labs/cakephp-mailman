@@ -37,7 +37,7 @@ class EmailListener implements EventListenerInterface
         Log::info(sprintf('[mailman][email][outbox] %s -> %s: %s',
             join(',', $email->from()),
             join(',', $email->to()),
-            $email->subject()
+            $email->getOriginalSubject()
         ), ['email']);
     }
 
@@ -64,14 +64,14 @@ class EmailListener implements EventListenerInterface
                 Log::error(sprintf('[mailman][email][error] %s -> %s: %s: %s',
                     join(',', $email->from()),
                     join(',', $email->to()),
-                    $email->subject(),
+                    $email->getOriginalSubject(),
                     $result['error']
                 ), ['email']);
             } else {
                 Log::info(sprintf('[mailman][email][sent] %s -> %s: %s',
                     join(',', $email->from()),
                     join(',', $email->to()),
-                    $email->subject()
+                    $email->getOriginalSubject()
                 ), ['email']);
             }
 
