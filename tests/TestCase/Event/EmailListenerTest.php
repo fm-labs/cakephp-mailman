@@ -69,13 +69,4 @@ class EmailListenerTest extends MailmanTestCase
         $event = new Event('Email.afterSend', $this->email);
         $this->emailListener->afterSend($event);
     }
-
-    /**
-     * Test beforeSend method
-     */
-    public function testTransportError()
-    {
-        $event = new Event('Email.transportError', $this->email);
-        $this->emailListener->transportError($event);
-    }
 }
