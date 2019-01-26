@@ -89,17 +89,6 @@ class EmailMessagesController extends AppController
                 'transport' => [],
                 'sent' => [],
                 'error_code' => []
-            ],
-            'fields.whitelist' => [
-                //'id',
-                //'folder',
-                'date_delivery',
-                'subject',
-                'to',
-                //'from',
-                'transport',
-                'sent',
-                'error_code',
             ]
         ]);
 
@@ -125,13 +114,13 @@ class EmailMessagesController extends AppController
                 return nl2br($val);
             }],
             'message' => ['formatter' => function ($val) {
-                return '<pre>' . h($val) . '</pre>';
+                return '<textarea>' . h($val) . '</textarea>';
             }],
             'result_headers' => ['formatter' => function ($val) {
                 return nl2br($val);
             }],
             'result_message' => ['formatter' => function ($val) {
-                return '<pre>' . h($val) . '</pre>';
+                return '<textarea>' . h($val) . '</textarea>';
             }],
             'sent' => []
         ]);
