@@ -1,6 +1,7 @@
 <?php
 
 use Cake\Log\Log;
+use Cake\Core\Configure;
 
 // Mailman log config
 if (!Log::config('mailman')) {
@@ -11,4 +12,10 @@ if (!Log::config('mailman')) {
         //'levels' => ['notice', 'info', 'debug'],
         'scopes' => ['mailman', 'email']
     ]);
+}
+
+if (\Cake\Core\Plugin::loaded('DebugKit')) {
+    if (!Configure::check('DebugKit.panels')) {
+        Configure::write('DebugKit.panels', ['DebugKit.Mail' => false]);
+    }
 }
