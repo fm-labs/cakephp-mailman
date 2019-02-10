@@ -15,6 +15,7 @@ use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
 use Cake\Http\MiddlewareQueue;
+use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
@@ -85,7 +86,7 @@ class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventLis
 
             $className = App::className($transport['className'], 'Mailer/Transport', 'Transport');
             if (!$className) {
-                debug("Mailer Transport Class not found: " . $transport['className']);
+                Log::critical("Mailer Transport Class not found: " . $transport['className']);
                 return $transport;
             }
 

@@ -15,7 +15,7 @@ if (!Log::config('mailman')) {
 }
 
 if (\Cake\Core\Plugin::loaded('DebugKit')) {
-    if (!Configure::check('DebugKit.panels')) {
-        Configure::write('DebugKit.panels', ['DebugKit.Mail' => false]);
-    }
+    //if (!Configure::check('DebugKit.panels')) {
+    //    Configure::write('DebugKit.panels.DebugKit.Mail', false);
+    //}
 }
