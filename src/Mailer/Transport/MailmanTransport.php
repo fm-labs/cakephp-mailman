@@ -3,10 +3,14 @@
 namespace Mailman\Mailer\Transport;
 
 use Cake\Core\App;
+use Cake\Core\Configure;
+use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
+use Cake\Log\Log;
 use Cake\Mailer\AbstractTransport;
 use Cake\Mailer\Email;
+use Cake\Mailer\Transport\DebugTransport;
 
 /**
  * Class MailmanTransport
@@ -19,7 +23,7 @@ class MailmanTransport extends AbstractTransport
     /**
      * @var AbstractTransport
      */
-    public $originalTransport = null;
+    protected $originalTransport = null;
 
     /**
      * Constructor
@@ -47,7 +51,16 @@ class MailmanTransport extends AbstractTransport
         if ($className) {
             unset($config['originalClassName']);
             $this->originalTransport = new $className($config);
+        } elseif (!empty($config['originalClassName'])) {
+            Log::critical("MailTransport class not found: " . $config['originalClassName']);
+        } elseif (!isset($config['originalClassName']) && Plugin::loaded('DebugKit')) { // workaround for DebugKit
+            $this->originalTransport = new DebugTransport();
         }
+    }
+
+    public function getOriginalTransport()
+    {
+        return $this->originalTransport;
     }
 
     /**
@@ -65,9 +78,8 @@ class MailmanTransport extends AbstractTransport
             $email = $event->result;
         }
 
-
         $result = [];
-        $exception = null;
+        //$exception = null;
         try {
             if (!$this->originalTransport) {
                 throw new \RuntimeException('Misconfigured mailman transport');
@@ -75,17 +87,19 @@ class MailmanTransport extends AbstractTransport
 
             $result = $this->originalTransport->send($email);
 
+        } catch (\Exception $ex) {
+            //$exception = $ex;
+            $error = $ex->getMessage();
+            //if (Configure::read('debug')) {
+            //    $error = sprintf("%s:%s %s: %s", $ex->getFile(), $ex->getLine(), $ex->getMessage(), $ex->getTraceAsString());
+            //}
+            $result = ['error' => $error];
+
+        } finally {
+
             // dispatch `Email.afterSend` event
             EventManager::instance()->dispatch(new Event('Email.afterSend', $email, $result));
 
-        } catch (\Exception $ex) {
-            //$exception = $ex;
-            $result = ['error' => $ex->getMessage()];
-
-            // dispatch `Email.transportError` event
-            EventManager::instance()->dispatch(new Event('Email.transportError', $email, $result));
-
-        } finally {
             // re-throw exception, if any
             //if ($exception !== null) {
             //    throw $exception;
