@@ -3,6 +3,7 @@
 namespace Mailman\Mailer\Storage;
 
 use Cake\Core\InstanceConfigTrait;
+use Cake\Core\Plugin;
 use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
@@ -12,7 +13,6 @@ use Mailman\Mailer\Transport\MailmanTransport;
  * Class DatabaseEmailStorage
  *
  * @package Mailman\Mailer\Storage
- * @todo Refactor as Log engine
  */
 class DatabaseEmailStorage
 {
@@ -70,13 +70,26 @@ class DatabaseEmailStorage
 
         if ($email->transport()) {
             $transport = $email->transport();
-            if ($transport instanceof MailmanTransport && isset($transport->originalTransport)) {
-                $transport = $transport->originalTransport;
+            $transportPrefix = "";
+            if ($transport instanceof MailmanTransport && $transport->getOriginalTransport()) {
+                //$transportPrefix = "MailMan:";
+                $transport = $transport->getOriginalTransport();
+            } elseif (Plugin::loaded('DebugKit') && $transport instanceof \DebugKit\Mailer\Transport\DebugKitTransport) {
+                $transportPrefix = "DebugKit:";
+                $reflection = new \ReflectionObject($transport);
+                $property = $reflection->getProperty('originalTransport');
+                $property->setAccessible(true);
+                $transport = $property->getValue($transport);
+
+                if ($transport instanceof MailmanTransport && $transport->getOriginalTransport()) {
+                    //$transportPrefix .= "MailMan:";
+                    $transport = $transport->getOriginalTransport();
+                }
             }
 
             $transportName = explode('\\', get_class($transport));
             $transportName = array_pop($transportName);
-            $entity->transport = substr($transportName, 0, -strlen('Transport'));
+            $entity->transport = $transportPrefix . substr($transportName, 0, -strlen('Transport'));
         }
 
         if (!is_array($transportResult) || empty($transportResult)) {
