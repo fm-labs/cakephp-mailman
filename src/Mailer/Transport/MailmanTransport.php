@@ -86,7 +86,6 @@ class MailmanTransport extends AbstractTransport
             }
 
             $result = $this->originalTransport->send($email);
-
         } catch (\Exception $ex) {
             //$exception = $ex;
             $error = $ex->getMessage();
@@ -94,9 +93,7 @@ class MailmanTransport extends AbstractTransport
             //    $error = sprintf("%s:%s %s: %s", $ex->getFile(), $ex->getLine(), $ex->getMessage(), $ex->getTraceAsString());
             //}
             $result = ['error' => $error];
-
         } finally {
-
             // dispatch `Email.afterSend` event
             EventManager::instance()->dispatch(new Event('Email.afterSend', $email, $result));
 

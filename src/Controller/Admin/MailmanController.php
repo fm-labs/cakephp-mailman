@@ -2,7 +2,6 @@
 
 namespace Mailman\Controller\Admin;
 
-
 /**
  * Class MailmanController
  *

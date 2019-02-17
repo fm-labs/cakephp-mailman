@@ -98,7 +98,6 @@ class DatabaseEmailStorage
             $entity->error_msg = 'Malformed Result';
             $entity->result_headers = '';
             $entity->result_message = '';
-
         } elseif (isset($transportResult['error'])) {
             $entity->folder = 'outbox';
             $entity->error_code = 2; // Transport error
@@ -107,7 +106,6 @@ class DatabaseEmailStorage
             $entity->date_delivery = null;
             //$entity->result_headers = $transportResult['headers'];
             $entity->result_message = $transportResult['error'];
-
         } else {
             $entity->folder = 'sent';
             $entity->error_code = 0;

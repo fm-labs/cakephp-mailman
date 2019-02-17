@@ -79,7 +79,7 @@ class EmailMessagesController extends AppController
             'query' => [
                 //'limit' => 25,
                 'contain' => [],
-                'fields' => ['id', 'subject', 'to', 'date_delivery', 'transport','sent','error_code','error_msg'],
+                'fields' => ['id', 'subject', 'to', 'date_delivery', 'transport', 'sent', 'error_code', 'error_msg'],
                 'order' => ['EmailMessages.id' => 'desc'],
             ],
             'fields' => [

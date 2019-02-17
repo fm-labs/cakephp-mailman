@@ -51,7 +51,7 @@ class MailmanTransportTest extends MailmanTestCase
         $result = [];
         EventManager::instance()->setEventList(new EventList());
         EventManager::instance()->addEventToList(new Event('Email.beforeSend'));
-        EventManager::instance()->on('Email.beforeSend', function(Event $event) use (&$result) {
+        EventManager::instance()->on('Email.beforeSend', function (Event $event) use (&$result) {
             $result['email'] = $event->subject();
         });
 
@@ -70,7 +70,7 @@ class MailmanTransportTest extends MailmanTestCase
         $result = [];
         EventManager::instance()->setEventList(new EventList());
         EventManager::instance()->addEventToList(new Event('Email.afterSend'));
-        EventManager::instance()->on('Email.afterSend', function(Event $event) use (&$result) {
+        EventManager::instance()->on('Email.afterSend', function (Event $event) use (&$result) {
             $result['email'] = $event->subject();
             $result['data'] = $event->data();
         });
@@ -97,7 +97,7 @@ class MailmanTransportTest extends MailmanTestCase
         $result = [];
         EventManager::instance()->setEventList(new EventList());
         EventManager::instance()->addEventToList(new Event('Email.transportError'));
-        EventManager::instance()->on('Email.transportError', function(Event $event) use (&$result) {
+        EventManager::instance()->on('Email.transportError', function (Event $event) use (&$result) {
             $result['email'] = $event->subject();
             $result['data'] = $event->data();
         });

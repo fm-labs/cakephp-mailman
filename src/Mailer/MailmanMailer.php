@@ -6,6 +6,7 @@ namespace Mailman\Mailer;
 use Cake\Mailer\Exception\MissingActionException;
 use Cake\Mailer\Mailer;
 use Cake\Mailer\Email;
+
 //use Mailman\Mailer\Storage\DatabaseEmailStorage;
 
 /**
@@ -44,11 +45,9 @@ class MailmanMailer extends Mailer
             call_user_func_array([$this, $action], $args);
 
             return $this->_send($this->_email);
-
         } finally {
             $this->reset();
         }
-
     }
 
     /**

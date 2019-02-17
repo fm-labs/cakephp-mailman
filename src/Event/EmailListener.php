@@ -34,7 +34,8 @@ class EmailListener implements EventListenerInterface
             return;
         }
 
-        Log::info(sprintf('[mailman][email][outbox] %s -> %s: %s',
+        Log::info(sprintf(
+            '[mailman][email][outbox] %s -> %s: %s',
             join(',', $email->from()),
             join(',', $email->to()),
             $email->getOriginalSubject()
@@ -51,6 +52,7 @@ class EmailListener implements EventListenerInterface
             $email = $event->subject();
             if (!($email instanceof Email)) {
                 Log::warning("[mailman] Event subject IS NOT an email object");
+
                 return;
             }
 
@@ -61,20 +63,21 @@ class EmailListener implements EventListenerInterface
             $dbStorage->store($email, $result);
 
             if (isset($result['error'])) {
-                Log::error(sprintf('[mailman][email][error] %s -> %s: %s: %s',
+                Log::error(sprintf(
+                    '[mailman][email][error] %s -> %s: %s: %s',
                     join(',', $email->from()),
                     join(',', $email->to()),
                     $email->getOriginalSubject(),
                     $result['error']
                 ), ['email']);
             } else {
-                Log::info(sprintf('[mailman][email][sent] %s -> %s: %s',
+                Log::info(sprintf(
+                    '[mailman][email][sent] %s -> %s: %s',
                     join(',', $email->from()),
                     join(',', $email->to()),
                     $email->getOriginalSubject()
                 ), ['email']);
             }
-
         } catch (\Exception $ex) {
             Log::error('[mailman][storage][db] Failed to store email message: ' . $ex->getMessage(), ['email']);
         }

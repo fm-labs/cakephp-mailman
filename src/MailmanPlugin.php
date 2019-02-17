@@ -64,7 +64,6 @@ class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventLis
         ]);
     }
 
-
     public function bootstrap(Application $app)
     {
         // inject MailmanTransport into all email transport configs
@@ -73,7 +72,7 @@ class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventLis
         $property->setAccessible(true);
         $configs = $property->getValue();
 
-        $configs = array_map(function($transport) {
+        $configs = array_map(function ($transport) {
 
             if (is_object($transport) && $transport instanceof MailmanTransport) {
                 return $transport;
@@ -81,12 +80,14 @@ class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventLis
 
             if (is_object($transport)) {
                 $transport = new MailmanTransport([], $transport);
+
                 return $transport;
             }
 
             $className = App::className($transport['className'], 'Mailer/Transport', 'Transport');
             if (!$className) {
                 Log::critical("Mailer Transport Class not found: " . $transport['className']);
+
                 return $transport;
             }
 
@@ -104,12 +105,10 @@ class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventLis
 
     public function routes(RouteBuilder $routes)
     {
-
     }
 
     public function middleware(MiddlewareQueue $middleware)
     {
-
     }
 
     public function backendBootstrap(Backend $backend)
