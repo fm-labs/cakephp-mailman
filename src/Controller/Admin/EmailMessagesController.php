@@ -1,7 +1,6 @@
 <?php
 namespace Mailman\Controller\Admin;
 
-use Backend\Controller\BackendActionsTrait;
 use Cake\Mailer\Email;
 
 /**
@@ -11,8 +10,6 @@ use Cake\Mailer\Email;
  */
 class EmailMessagesController extends AppController
 {
-    use BackendActionsTrait;
-
     public $modelClass = "Mailman.EmailMessages";
 
     /**
@@ -27,13 +24,15 @@ class EmailMessagesController extends AppController
      * @var array
      */
     public $actions = [
-        'index'     => 'Backend.Index',
-        'view'      => 'Backend.View',
-        'delete'    => 'Backend.Delete',
+        'index' => 'Backend.Index',
+        'view' => 'Backend.View',
+        'delete' => 'Backend.Delete',
     ];
 
     /**
      * Send Test email
+     *
+     * @return void
      * @TODO Refactor with email form or move to tests
      */
     public function test()
@@ -125,14 +124,6 @@ class EmailMessagesController extends AppController
             'sent' => []
         ]);
 
-        $this->Action->execute();
-    }
-
-    /**
-     * Delete method
-     */
-    public function delete($id = null)
-    {
         $this->Action->execute();
     }
 }
