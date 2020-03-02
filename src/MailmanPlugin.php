@@ -36,7 +36,7 @@ class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventLis
     public function implementedEvents()
     {
         return [
-            'Backend.Sidebar.build' => ['callable' => 'buildBackendMenu', 'priority' => 80]
+            'Backend.Menu.build.admin_primary' => ['callable' => 'buildBackendMenu', 'priority' => 80]
         ];
     }
 
