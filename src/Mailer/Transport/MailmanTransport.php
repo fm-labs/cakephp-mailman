@@ -53,7 +53,7 @@ class MailmanTransport extends AbstractTransport
             $this->originalTransport = new $className($config);
         } elseif (!empty($config['originalClassName'])) {
             Log::critical("MailTransport class not found: " . $config['originalClassName']);
-        } elseif (!isset($config['originalClassName']) && Plugin::loaded('DebugKit')) { // workaround for DebugKit
+        } elseif (!isset($config['originalClassName']) && Plugin::isLoaded('DebugKit')) { // workaround for DebugKit
             $this->originalTransport = new DebugTransport();
         }
     }

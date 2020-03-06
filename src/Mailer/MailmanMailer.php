@@ -38,8 +38,8 @@ class MailmanMailer extends Mailer
             }
 
             $this->_email->setHeaders($headers);
-            if (!$this->_email->viewBuilder()->template()) {
-                $this->_email->viewBuilder()->template($action);
+            if (!$this->_email->viewBuilder()->getTemplate()) {
+                $this->_email->viewBuilder()->setTemplate($action);
             }
 
             call_user_func_array([$this, $action], $args);

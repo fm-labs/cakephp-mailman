@@ -4,13 +4,13 @@
 <div class="form">
     <?= $this->Form->create($emailForm, ['class' => 'no-ajax', 'horizontal' => true]); ?>
     <?php
-        echo $this->Form->input('from');
-        echo $this->Form->input('to');
-        echo $this->Form->input('cc');
-        echo $this->Form->input('bcc');
-        echo $this->Form->input('subject');
-        echo $this->Form->input('message', ['rows' => 20]);
-        echo $this->Form->input('log', ['default' => true]);
+        echo $this->Form->control('from');
+        echo $this->Form->control('to');
+        echo $this->Form->control('cc');
+        echo $this->Form->control('bcc');
+        echo $this->Form->control('subject');
+        echo $this->Form->control('message', ['rows' => 20]);
+        echo $this->Form->control('log', ['default' => true]);
     ?>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>

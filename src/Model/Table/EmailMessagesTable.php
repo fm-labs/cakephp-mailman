@@ -28,7 +28,7 @@ class EmailMessagesTable extends Table
 
         $this->addBehavior('Timestamp');
 
-        if (Plugin::loaded('Search')) {
+        if (Plugin::isLoaded('Search')) {
             $this->addBehavior('Search.Search');
             $this->searchManager()
                 ->add('q', 'Search.Like', [

@@ -4,8 +4,8 @@ use Cake\Log\Log;
 use Cake\Core\Configure;
 
 // Mailman log config
-if (!Log::config('mailman')) {
-    Log::config('mailman', [
+if (!Log::getConfig('mailman')) {
+    Log::setConfig('mailman', [
         'className' => 'Cake\Log\Engine\FileLog',
         'path' => LOGS,
         'file' => 'mailman',
@@ -14,7 +14,7 @@ if (!Log::config('mailman')) {
     ]);
 }
 
-if (\Cake\Core\Plugin::loaded('DebugKit')) {
+if (\Cake\Core\Plugin::isLoaded('DebugKit')) {
     //if (!Configure::check('DebugKit.panels')) {
     //    Configure::write('DebugKit.panels.DebugKit.Mail', false);
     //}

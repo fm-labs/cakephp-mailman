@@ -74,7 +74,7 @@ class DatabaseEmailStorage
             if ($transport instanceof MailmanTransport && $transport->getOriginalTransport()) {
                 //$transportPrefix = "MailMan:";
                 $transport = $transport->getOriginalTransport();
-            } elseif (Plugin::loaded('DebugKit') && $transport instanceof \DebugKit\Mailer\Transport\DebugKitTransport) {
+            } elseif (Plugin::isLoaded('DebugKit') && $transport instanceof \DebugKit\Mailer\Transport\DebugKitTransport) {
                 $transportPrefix = "DebugKit:";
                 $reflection = new \ReflectionObject($transport);
                 $property = $reflection->getProperty('originalTransport');
