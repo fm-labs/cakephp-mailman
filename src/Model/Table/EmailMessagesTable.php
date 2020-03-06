@@ -22,9 +22,9 @@ class EmailMessagesTable extends Table
     {
         parent::initialize($config);
 
-        $this->table('mailman_email_messages');
-        $this->displayField('subject');
-        $this->primaryKey('id');
+        $this->setTable('mailman_email_messages');
+        $this->setDisplayField('subject');
+        $this->setPrimaryKey('id');
 
         $this->addBehavior('Timestamp');
 

@@ -35,8 +35,8 @@ class DatabaseEmailStorage
      */
     public function __construct($config = [])
     {
-        $this->config($config);
-        $this->_table = TableRegistry::get($this->config('model'));
+        $this->setConfig($config);
+        $this->_table = TableRegistry::getTableLocator()->get($this->getConfig('model'));
     }
 
     /**

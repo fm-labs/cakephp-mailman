@@ -3,14 +3,12 @@
 namespace Mailman;
 
 use Backend\Backend;
-use Backend\BackendPluginInterface;
-use Backend\Event\RouteBuilderEvent;
-use Backend\View\BackendView;
 use Banana\Application;
 use Banana\Menu\Menu;
-use Banana\Plugin\PluginInterface;
+use Banana\Plugin\BasePlugin;
 use Cake\Core\App;
 use Cake\Core\Configure;
+use Cake\Core\PluginApplicationInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
@@ -28,7 +26,7 @@ use ReflectionClass;
  *
  * @package Mailman
  */
-class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventListenerInterface
+class Plugin extends BasePlugin implements EventListenerInterface
 {
     /**
      * @return array
@@ -43,9 +41,9 @@ class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventLis
     /**
      * @param Event $event
      */
-    public function buildBackendMenu(Event $event)
+    public function buildBackendMenu(Event $event, \Banana\Menu\Menu $menu)
     {
-        $event->subject()->addItem([
+        $menu->addItem([
             'title' => 'Mailman',
             'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
             'data-icon' => 'envelope-o',
@@ -64,9 +62,13 @@ class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventLis
         ]);
     }
 
-    public function bootstrap(Application $app)
+    public function bootstrap(PluginApplicationInterface $app)
     {
+        parent::bootstrap($app);
+
         // inject MailmanTransport into all email transport configs
+        // @todo MailmanTransport injection not working in 3.8
+        /*
         $reflection = new ReflectionClass(Email::class);
         $property = $reflection->getProperty('_transportConfig');
         $property->setAccessible(true);
@@ -98,22 +100,12 @@ class MailmanPlugin implements PluginInterface, BackendPluginInterface, EventLis
         }, $configs);
 
         $property->setValue($configs);
+        */
 
         // attach listeners
-        EventManager::instance()->on(new EmailListener());
-    }
 
-    public function routes(RouteBuilder $routes)
-    {
-    }
-
-    public function middleware(MiddlewareQueue $middleware)
-    {
-    }
-
-    public function backendBootstrap(Backend $backend)
-    {
         EventManager::instance()->on($this);
+        EventManager::instance()->on(new EmailListener());
     }
 
     public function backendRoutes(RouteBuilder $routes)

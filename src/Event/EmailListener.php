@@ -27,7 +27,7 @@ class EmailListener implements EventListenerInterface
      */
     public function beforeSend(Event $event)
     {
-        $email = $event->subject();
+        $email = $event->getSubject();
         if (!($email instanceof Email)) {
             Log::warning("[mailman] Event subject IS NOT an email object");
 
@@ -49,7 +49,7 @@ class EmailListener implements EventListenerInterface
     public function afterSend(Event $event)
     {
         try {
-            $email = $event->subject();
+            $email = $event->getSubject();
             if (!($email instanceof Email)) {
                 Log::warning("[mailman] Event subject IS NOT an email object");
 
@@ -92,12 +92,12 @@ class EmailListener implements EventListenerInterface
     {
         // show emails as flash messages in debug mode
         if (Configure::read('debug') == true && Configure::read('Mailman.Debug.flashEmails') == true) {
-            if ($event->subject()->components()->has('Flash')) {
+            if ($event->getSubject()->components()->has('Flash')) {
                 foreach ($this->_emails as $email) {
                     if (isset($email['error'])) {
-                        $event->subject()->components()->get('Flash')->error('Email sending failed: ' . $email['error']);
+                        $event->getSubject()->components()->get('Flash')->error('Email sending failed: ' . $email['error']);
                     } else {
-                        $event->subject()->components()->get('Flash')->success('Email sent');
+                        $event->getSubject()->components()->get('Flash')->success('Email sent');
                     }
                 }
             }
