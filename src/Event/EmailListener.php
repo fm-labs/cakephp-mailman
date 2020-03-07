@@ -36,8 +36,8 @@ class EmailListener implements EventListenerInterface
 
         Log::info(sprintf(
             '[mailman][email][outbox] %s -> %s: %s',
-            join(',', $email->from()),
-            join(',', $email->to()),
+            join(',', $email->getFrom()),
+            join(',', $email->getTo()),
             $email->getOriginalSubject()
         ), ['email']);
     }
@@ -56,7 +56,7 @@ class EmailListener implements EventListenerInterface
                 return;
             }
 
-            $result = $event->data();
+            $result = $event->getData();
             $this->_emails[] = $result;
 
             $dbStorage = new DatabaseEmailStorage();
@@ -65,16 +65,16 @@ class EmailListener implements EventListenerInterface
             if (isset($result['error'])) {
                 Log::error(sprintf(
                     '[mailman][email][error] %s -> %s: %s: %s',
-                    join(',', $email->from()),
-                    join(',', $email->to()),
+                    join(',', $email->getFrom()),
+                    join(',', $email->getTo()),
                     $email->getOriginalSubject(),
                     $result['error']
                 ), ['email']);
             } else {
                 Log::info(sprintf(
                     '[mailman][email][sent] %s -> %s: %s',
-                    join(',', $email->from()),
-                    join(',', $email->to()),
+                    join(',', $email->getFrom()),
+                    join(',', $email->getTo()),
                     $email->getOriginalSubject()
                 ), ['email']);
             }

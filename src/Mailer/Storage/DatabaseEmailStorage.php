@@ -7,7 +7,9 @@ use Cake\Core\Plugin;
 use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
+use DebugKit\Mailer\Transport\DebugKitTransport;
 use Mailman\Mailer\Transport\MailmanTransport;
+use Mailman\Model\Entity\EmailMessage;
 
 /**
  * Class DatabaseEmailStorage
@@ -49,16 +51,17 @@ class DatabaseEmailStorage
     public function store(Email $email, $transportResult = null)
     {
         // Email instance to EmailMessage entity
+        /** @var EmailMessage $entity */
         $entity = $this->_table->newEntity([
-            'charset'       => $email->charset(),
+            'charset'       => $email->getCharset(),
             'subject'       => $email->getOriginalSubject(),
-            'from'          => $this->_listToString($email->from()),
-            'sender'        => $this->_listToString($email->sender()),
-            'to'            => $this->_listToString($email->to()),
-            'cc'            => $this->_listToString($email->cc()),
-            'bcc'           => $this->_listToString($email->bcc()),
-            'reply_to'      => $this->_listToString($email->replyTo()),
-            'read_receipt'  => $this->_listToString($email->readReceipt()),
+            'from'          => $this->_listToString($email->getFrom()),
+            'sender'        => $this->_listToString($email->getSender()),
+            'to'            => $this->_listToString($email->getTo()),
+            'cc'            => $this->_listToString($email->getCc()),
+            'bcc'           => $this->_listToString($email->getBcc()),
+            'reply_to'      => $this->_listToString($email->getReplyTo()),
+            'read_receipt'  => $this->_listToString($email->getReadReceipt()),
             'headers'       => $this->_listToString($email->getHeaders(), true),
             'message'       => $this->_listToString($email->message()),
             'folder'        => 'sent',
@@ -68,13 +71,13 @@ class DatabaseEmailStorage
             'date_delivery' => null
         ]);
 
-        if ($email->transport()) {
-            $transport = $email->transport();
+        if ($email->getTransport()) {
+            $transport = $email->getTransport();
             $transportPrefix = "";
             if ($transport instanceof MailmanTransport && $transport->getOriginalTransport()) {
                 //$transportPrefix = "MailMan:";
                 $transport = $transport->getOriginalTransport();
-            } elseif (Plugin::isLoaded('DebugKit') && $transport instanceof \DebugKit\Mailer\Transport\DebugKitTransport) {
+            } elseif (Plugin::isLoaded('DebugKit') && $transport instanceof DebugKitTransport) {
                 $transportPrefix = "DebugKit:";
                 $reflection = new \ReflectionObject($transport);
                 $property = $reflection->getProperty('originalTransport');

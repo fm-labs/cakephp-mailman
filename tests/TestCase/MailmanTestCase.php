@@ -2,7 +2,7 @@
 
 namespace Mailman\Test\TestCase;
 
-use Cake\Mailer\Email;
+use Cake\Mailer\TransportFactory;
 use Cake\TestSuite\TestCase;
 
 /**
@@ -19,7 +19,7 @@ class MailmanTestCase extends TestCase
     {
         parent::setUp();
 
-        Email::configTransport('test', [
+        TransportFactory::setConfig('test', [
             'className' => 'Mailman.Mailman',
             'originalClassName' => 'Debug'
         ]);
@@ -32,6 +32,6 @@ class MailmanTestCase extends TestCase
     {
         parent::tearDown();
 
-        Email::dropTransport('test');
+        TransportFactory::drop('test');
     }
 }
