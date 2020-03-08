@@ -17,7 +17,7 @@ class EmailMessagesController extends AppController
      */
     public $paginate = [
         'limit' => 100,
-        'order' => ['EmailMessages.id' => 'DESC']
+        'order' => ['EmailMessages.id' => 'DESC'],
     ];
 
     /**
@@ -87,8 +87,8 @@ class EmailMessagesController extends AppController
                 'subject' => [],
                 'transport' => [],
                 'sent' => [],
-                'error_code' => []
-            ]
+                'error_code' => [],
+            ],
         ]);
 
 //        $this->Action->registerExternal('compose', [
@@ -121,7 +121,7 @@ class EmailMessagesController extends AppController
             'result_message' => ['formatter' => function ($val) {
                 return '<textarea>' . h($val) . '</textarea>';
             }],
-            'sent' => []
+            'sent' => [],
         ]);
 
         $this->Action->execute();

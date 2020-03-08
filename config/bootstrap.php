@@ -10,7 +10,7 @@ if (!Log::getConfig('mailman')) {
         'path' => LOGS,
         'file' => 'mailman',
         //'levels' => ['notice', 'info', 'debug'],
-        'scopes' => ['mailman', 'email']
+        'scopes' => ['mailman', 'email'],
     ]);
 }
 

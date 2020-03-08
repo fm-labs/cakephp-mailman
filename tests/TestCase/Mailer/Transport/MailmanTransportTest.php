@@ -30,7 +30,7 @@ class MailmanTransportTest extends MailmanTestCase
             'transport' => 'test',
             'from' => 'test@example.org',
             'to' => 'foo@example.org',
-            'subject' => 'Test'
+            'subject' => 'Test',
         ]);
     }
 

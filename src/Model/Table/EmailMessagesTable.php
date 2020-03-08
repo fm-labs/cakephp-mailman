@@ -38,7 +38,7 @@ class EmailMessagesTable extends Table
                     'comparison' => 'LIKE',
                     'wildcardAny' => '*',
                     'wildcardOne' => '?',
-                    'field' => ['to', 'from', 'subject']
+                    'field' => ['to', 'from', 'subject'],
                 ])
                 ->add('from', 'Search.Like', [
                     'before' => true,
@@ -47,7 +47,7 @@ class EmailMessagesTable extends Table
                     'comparison' => 'LIKE',
                     'wildcardAny' => '*',
                     'wildcardOne' => '?',
-                    'field' => ['from']
+                    'field' => ['from'],
                 ])
                 ->add('to', 'Search.Like', [
                     'before' => true,
@@ -56,7 +56,7 @@ class EmailMessagesTable extends Table
                     'comparison' => 'LIKE',
                     'wildcardAny' => '*',
                     'wildcardOne' => '?',
-                    'field' => ['to']
+                    'field' => ['to'],
                 ])
                 ->add('subject', 'Search.Like', [
                     'before' => true,
@@ -65,13 +65,13 @@ class EmailMessagesTable extends Table
                     'comparison' => 'LIKE',
                     'wildcardAny' => '*',
                     'wildcardOne' => '?',
-                    'field' => ['subject']
+                    'field' => ['subject'],
                 ])
                 ->value('folder', [
-                    'filterEmpty' => true
+                    'filterEmpty' => true,
                 ])
                 ->value('transport', [
-                    'filterEmpty' => true
+                    'filterEmpty' => true,
                 ]);
         }
     }

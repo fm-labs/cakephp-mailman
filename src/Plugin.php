@@ -34,7 +34,7 @@ class Plugin extends BasePlugin implements EventListenerInterface
     public function implementedEvents()
     {
         return [
-            'Backend.Menu.build.admin_primary' => ['callable' => 'buildBackendMenu', 'priority' => 80]
+            'Backend.Menu.build.admin_primary' => ['callable' => 'buildBackendMenu', 'priority' => 80],
         ];
     }
 
@@ -51,14 +51,14 @@ class Plugin extends BasePlugin implements EventListenerInterface
                 'history' => [
                     'title' => __('Email History'),
                     'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
-                    'data-icon' => 'history'
+                    'data-icon' => 'history',
                 ],
                 'compose' => [
                     'title' => __('Compose Email'),
                     'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
-                    'data-icon' => 'envelope-open'
+                    'data-icon' => 'envelope-open',
                 ],
-            ]
+            ],
         ]);
     }
 

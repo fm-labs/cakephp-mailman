@@ -24,7 +24,7 @@ class DatabaseEmailStorage
      * @var array
      */
     protected $_defaultConfig = [
-        'model' => 'Mailman.EmailMessages'
+        'model' => 'Mailman.EmailMessages',
     ];
 
     /**
@@ -68,7 +68,7 @@ class DatabaseEmailStorage
             'error_code'    => 0,
             'error_message' => '',
             'sent'          => 0,
-            'date_delivery' => null
+            'date_delivery' => null,
         ]);
 
         if ($email->getTransport()) {

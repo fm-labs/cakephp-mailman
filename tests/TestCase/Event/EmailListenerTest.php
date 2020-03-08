@@ -35,7 +35,7 @@ class EmailListenerTest extends MailmanTestCase
             'transport' => 'test',
             'from' => 'test@example.org',
             'to' => 'foo@example.org',
-            'subject' => 'Test'
+            'subject' => 'Test',
         ]);
 
         $this->emailListener = new EmailListener();

@@ -21,7 +21,7 @@ class MailmanTestCase extends TestCase
 
         TransportFactory::setConfig('test', [
             'className' => 'Mailman.Mailman',
-            'originalClassName' => 'Debug'
+            'originalClassName' => 'Debug',
         ]);
     }
 

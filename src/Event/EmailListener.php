@@ -112,7 +112,7 @@ class EmailListener implements EventListenerInterface
         return [
             'Email.beforeSend'          => 'beforeSend',
             'Email.afterSend'           => 'afterSend',
-            'Controller.beforeRender'   => 'beforeRender'
+            'Controller.beforeRender'   => 'beforeRender',
         ];
     }
 }
