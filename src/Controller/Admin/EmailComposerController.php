@@ -27,7 +27,7 @@ class EmailComposerController extends AppController
         $form = new EmailForm();
         if ($this->request->is(['post', 'put'])) {
             try {
-                $result = $form->execute($this->request->data);
+                $result = $form->execute($this->request->getData());
                 debug($result);
                 $this->Flash->success(__('Email message has been sent'));
             } catch (\Exception $ex) {
