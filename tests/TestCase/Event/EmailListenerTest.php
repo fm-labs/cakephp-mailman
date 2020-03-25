@@ -27,7 +27,7 @@ class EmailListenerTest extends MailmanTestCase
     /**
      * Setup
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -44,7 +44,7 @@ class EmailListenerTest extends MailmanTestCase
     /**
      * Tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

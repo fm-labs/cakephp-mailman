@@ -31,7 +31,7 @@ class Plugin extends BasePlugin implements EventListenerInterface
     /**
      * @return array
      */
-    public function implementedEvents()
+    public function implementedEvents(): array
     {
         return [
             'Backend.Menu.build.admin_primary' => ['callable' => 'buildBackendMenu', 'priority' => 80],
@@ -62,7 +62,7 @@ class Plugin extends BasePlugin implements EventListenerInterface
         ]);
     }
 
-    public function bootstrap(PluginApplicationInterface $app)
+    public function bootstrap(PluginApplicationInterface $app): void
     {
         parent::bootstrap($app);
 

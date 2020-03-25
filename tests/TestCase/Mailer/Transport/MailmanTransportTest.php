@@ -23,7 +23,7 @@ class MailmanTransportTest extends MailmanTestCase
     /**
      * Setup test class
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->email = new Email([
@@ -37,7 +37,7 @@ class MailmanTransportTest extends MailmanTestCase
     /**
      * Tear down
      */
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->email = null;
