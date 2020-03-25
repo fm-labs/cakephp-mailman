@@ -96,79 +96,79 @@ class EmailMessagesTable extends Table
     {
         $validator
             ->add('id', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('id', 'create');
+            ->allowEmptyString('id', 'create');
 
         $validator
-            ->allowEmpty('folder');
+            ->allowEmptyString('folder');
 
         $validator
             ->requirePresence('transport', 'create')
-            ->notEmpty('transport');
+            ->notEmptyString('transport');
 
         $validator
             ->requirePresence('from', 'create')
-            ->notEmpty('from');
+            ->notEmptyString('from');
 
         $validator
-            ->allowEmpty('sender');
+            ->allowEmptyString('sender');
 
         $validator
             ->requirePresence('to', 'create')
-            ->notEmpty('to');
+            ->notEmptyString('to');
 
         $validator
-            ->allowEmpty('cc');
+            ->allowEmptyString('cc');
 
         $validator
-            ->allowEmpty('bcc');
+            ->allowEmptyString('bcc');
 
         $validator
-            ->allowEmpty('reply_to');
+            ->allowEmptyString('reply_to');
 
         $validator
-            ->allowEmpty('subject');
+            ->allowEmptyString('subject');
 
         $validator
-            ->allowEmpty('headers');
+            ->allowEmptyString('headers');
 
         $validator
-            ->allowEmpty('message');
+            ->allowEmptyString('message');
 
         $validator
-            ->allowEmpty('read_receipt');
+            ->allowEmptyString('read_receipt');
 
         $validator
-            ->allowEmpty('return_path');
+            ->allowEmptyString('return_path');
 
         $validator
-            ->allowEmpty('email_format');
+            ->allowEmptyString('email_format');
 
         $validator
-            ->allowEmpty('charset');
+            ->allowEmptyString('charset');
 
         $validator
-            ->allowEmpty('result_headers');
+            ->allowEmptyString('result_headers');
 
         $validator
-            ->allowEmpty('result_message');
+            ->allowEmptyString('result_message');
 
         $validator
             ->add('error_code', 'valid', ['rule' => 'numeric'])
-            ->allowEmpty('error_code');
+            ->allowEmptyString('error_code');
 
         $validator
-            ->allowEmpty('error_msg');
+            ->allowEmptyString('error_msg');
 
         $validator
             ->add('sent', 'valid', ['rule' => 'boolean'])
-            ->allowEmpty('sent');
+            ->allowEmptyString('sent');
 
         $validator
             ->add('date_delivery', 'valid', ['rule' => 'datetime'])
-            ->allowEmpty('date_delivery');
+            ->allowEmptyString('date_delivery');
 
         $validator
-            ->allowEmpty('messageid');
+            ->allowEmptyString('messageid');
 
         return $validator;
     }

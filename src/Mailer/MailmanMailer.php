@@ -67,7 +67,6 @@ class MailmanMailer extends Mailer
      * @param bool $content
      * @return array
      * @throws \Exception
-     * @deprecated
      */
     protected function _send(Email $email, $content = null, $throwExceptions = false)
     {
