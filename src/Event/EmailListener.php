@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mailman\Event;
 
@@ -22,7 +23,7 @@ class EmailListener implements EventListenerInterface
     protected $_emails = [];
 
     /**
-     * @param Event $event
+     * @param \Cake\Event\Event $event
      * @return void
      */
     public function beforeSend(Event $event)
@@ -43,7 +44,7 @@ class EmailListener implements EventListenerInterface
     }
 
     /**
-     * @param Event $event
+     * @param \Cake\Event\Event $event
      * @return void
      */
     public function afterSend(Event $event)
@@ -84,7 +85,7 @@ class EmailListener implements EventListenerInterface
     }
 
     /**
-     * @param Event $event
+     * @param \Cake\Event\Event $event
      * @return void
      * @deprecated Use DebugKit plugin instead to debug email messages
      */

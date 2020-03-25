@@ -1,25 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace Mailman;
 
-use Backend\Backend;
-use Banana\Application;
-use Banana\Menu\Menu;
 use Banana\Plugin\BasePlugin;
-use Cake\Core\App;
-use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
-use Cake\Http\MiddlewareQueue;
-use Cake\Log\Log;
-use Cake\Mailer\Email;
 use Cake\Routing\RouteBuilder;
-use Cake\Routing\Router;
 use Mailman\Event\EmailListener;
-use Mailman\Mailer\Transport\MailmanTransport;
-use ReflectionClass;
 
 /**
  * Class MailmanPlugin
@@ -39,7 +29,7 @@ class Plugin extends BasePlugin implements EventListenerInterface
     }
 
     /**
-     * @param Event $event
+     * @param \Cake\Event\Event $event
      */
     public function buildBackendMenu(Event $event, \Banana\Menu\Menu $menu)
     {

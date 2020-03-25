@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Mailman\Model\Entity;
 
 use Cake\ORM\Entity;
@@ -33,7 +35,6 @@ use Cake\ORM\Entity;
  */
 class EmailMessage extends Entity
 {
-
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *

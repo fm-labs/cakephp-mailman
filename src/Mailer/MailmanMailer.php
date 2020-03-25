@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 namespace Mailman\Mailer;
 
 //use Cake\Log\Log;
+use Cake\Mailer\Email;
 use Cake\Mailer\Exception\MissingActionException;
 use Cake\Mailer\Mailer;
-use Cake\Mailer\Email;
 
 //use Mailman\Mailer\Storage\DatabaseEmailStorage;
 
@@ -51,7 +52,7 @@ class MailmanMailer extends Mailer
     }
 
     /**
-     * @param Email $email
+     * @param \Cake\Mailer\Email $email
      * @return array
      * @deprecated
      */
@@ -63,7 +64,7 @@ class MailmanMailer extends Mailer
     /**
      * Send email with Mailman hooks
      *
-     * @param Email $email
+     * @param \Cake\Mailer\Email $email
      * @param bool $content
      * @return array
      * @throws \Exception

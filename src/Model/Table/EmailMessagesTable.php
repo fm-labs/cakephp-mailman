@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Mailman\Model\Table;
 
 use Cake\Core\Plugin;

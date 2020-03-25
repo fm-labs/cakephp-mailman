@@ -1,9 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Mailman\Mailer\Transport;
 
 use Cake\Core\App;
-use Cake\Core\Configure;
 use Cake\Core\Plugin;
 use Cake\Event\Event;
 use Cake\Event\EventManager;
@@ -19,9 +19,8 @@ use Cake\Mailer\Transport\DebugTransport;
  */
 class MailmanTransport extends AbstractTransport
 {
-
     /**
-     * @var AbstractTransport
+     * @var \Cake\Mailer\AbstractTransport
      */
     protected $originalTransport = null;
 
@@ -29,9 +28,9 @@ class MailmanTransport extends AbstractTransport
      * Constructor
      *
      * @param array $config Configuration options.
-     * @param AbstractTransport|null $originalTransport The transport that is to be decorated
+     * @param \Cake\Mailer\AbstractTransport|null $originalTransport The transport that is to be decorated
      */
-    public function __construct($config = [], AbstractTransport $originalTransport = null)
+    public function __construct($config = [], ?AbstractTransport $originalTransport = null)
     {
         if ($originalTransport !== null) {
             $this->originalTransport = $originalTransport;

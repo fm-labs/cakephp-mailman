@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Mailman\Mailer\Storage;
 
@@ -9,7 +10,6 @@ use Cake\Mailer\Email;
 use Cake\ORM\TableRegistry;
 use DebugKit\Mailer\Transport\DebugKitTransport;
 use Mailman\Mailer\Transport\MailmanTransport;
-use Mailman\Model\Entity\EmailMessage;
 
 /**
  * Class DatabaseEmailStorage
@@ -44,14 +44,14 @@ class DatabaseEmailStorage
     /**
      * Store Email instance in database
      *
-     * @param Email $email
+     * @param \Cake\Mailer\Email $email
      * @param null $transportResult
      * @return bool|\Cake\Datasource\EntityInterface|mixed
      */
     public function store(Email $email, $transportResult = null)
     {
         // Email instance to EmailMessage entity
-        /** @var EmailMessage $entity */
+        /** @var \Mailman\Model\Entity\EmailMessage $entity */
         $entity = $this->_table->newEntity([
             'charset'       => $email->getCharset(),
             'subject'       => $email->getOriginalSubject(),
