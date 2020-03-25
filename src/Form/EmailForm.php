@@ -19,7 +19,7 @@ class EmailForm extends Form
      * @param \Cake\Form\Schema $schema
      * @return $this
      */
-    protected function _buildSchema(Schema $schema)
+    protected function _buildSchema(Schema $schema): Schema
     {
         return $schema
             ->addField('from', ['type' => 'string'])
@@ -56,7 +56,7 @@ class EmailForm extends Form
      * @param array $data
      * @return array
      */
-    protected function _execute(array $data)
+    protected function _execute(array $data): bool
     {
         $email = new Email([
             'transport' => 'default',
