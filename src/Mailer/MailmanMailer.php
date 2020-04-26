@@ -28,7 +28,7 @@ class MailmanMailer extends Mailer
      * @throws \Cake\Mailer\Exception\MissingActionException
      * @throws \BadMethodCallException
      */
-    public function send($action, $args = [], $headers = [])
+    public function send(?string $action = null, array $args = [], array $headers = []): array
     {
         try {
             if (!method_exists($this, $action)) {
