@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Mailman;
 
-use Banana\Plugin\BasePlugin;
+use Cupcake\Plugin\BasePlugin;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
@@ -24,14 +24,14 @@ class Plugin extends BasePlugin implements EventListenerInterface
     public function implementedEvents(): array
     {
         return [
-            'Backend.Menu.build.admin_primary' => ['callable' => 'buildBackendMenu', 'priority' => 80],
+            'Admin.Menu.build.admin_primary' => ['callable' => 'buildAdminMenu', 'priority' => 80],
         ];
     }
 
     /**
      * @param \Cake\Event\Event $event
      */
-    public function buildBackendMenu(Event $event, \Banana\Menu\Menu $menu)
+    public function buildAdminMenu(Event $event, \Cupcake\Menu\Menu $menu)
     {
         $menu->addItem([
             'title' => 'Mailman',
@@ -98,7 +98,7 @@ class Plugin extends BasePlugin implements EventListenerInterface
         EventManager::instance()->on(new EmailListener());
     }
 
-    public function backendRoutes(RouteBuilder $routes)
+    public function adminRoutes(RouteBuilder $routes)
     {
         // Admin routes
         $routes->fallbacks('DashedRoute');
