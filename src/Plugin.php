@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace Mailman;
 
-use Cupcake\Plugin\BasePlugin;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
-use Cake\Routing\RouteBuilder;
+use Cupcake\Plugin\BasePlugin;
 use Mailman\Event\EmailListener;
 
 /**
@@ -30,8 +29,10 @@ class Plugin extends BasePlugin implements EventListenerInterface
 
     /**
      * @param \Cake\Event\Event $event
+     * @param \Cupcake\Menu\MenuItemCollection $menu
+     * @return void
      */
-    public function buildAdminMenu(Event $event, \Cupcake\Menu\Menu $menu)
+    public function buildAdminMenu(Event $event, \Cupcake\Menu\MenuItemCollection $menu): void
     {
         $menu->addItem([
             'title' => 'Mailman',
@@ -96,11 +97,5 @@ class Plugin extends BasePlugin implements EventListenerInterface
 
         EventManager::instance()->on($this);
         EventManager::instance()->on(new EmailListener());
-    }
-
-    public function adminRoutes(RouteBuilder $routes)
-    {
-        // Admin routes
-        $routes->fallbacks('DashedRoute');
     }
 }
