@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Mailman\Controller\Admin;
 
+use Cake\Http\Exception\NotImplementedException;
+
 /**
  * Class EmailProfilesController
  *
@@ -12,8 +14,12 @@ class EmailProfilesController extends AppController
 {
     /**
      * Index action method
+     *
+     * @return void
      */
-    public function index()
+    public function index(): void
     {
+        //@todo: Implement me
+        throw new NotImplementedException();
     }
 }

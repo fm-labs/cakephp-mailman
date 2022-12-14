@@ -8,6 +8,7 @@ use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Log\Log;
 use Cake\Mailer\Email;
+use Cake\Mailer\Message;
 use Mailman\Mailer\Storage\DatabaseEmailStorage;
 
 /**
@@ -29,18 +30,22 @@ class EmailListener implements EventListenerInterface
     public function beforeSend(Event $event)
     {
         $email = $event->getSubject();
-        if (!($email instanceof Email)) {
-            Log::warning("[mailman] Event subject IS NOT an email object");
-
-            return;
+        if ($email instanceof Email) {
+            Log::info(sprintf(
+                '[mailman][email][outbox] %s -> %s: %s',
+                join(',', $email->getFrom()),
+                join(',', $email->getTo()),
+                $email->getSubject()
+            ), ['email']);
+        } elseif ($email instanceof Message) {
+            Log::info(sprintf(
+                '[mailman][msg][outbox] %s -> %s: %s',
+                join(',', $email->getFrom()),
+                join(',', $email->getTo()),
+                $email->getOriginalSubject()
+            ), ['email']);
         }
 
-        Log::info(sprintf(
-            '[mailman][email][outbox] %s -> %s: %s',
-            join(',', $email->getFrom()),
-            join(',', $email->getTo()),
-            $email->getOriginalSubject()
-        ), ['email']);
     }
 
     /**
@@ -96,9 +101,11 @@ class EmailListener implements EventListenerInterface
             if ($event->getSubject()->components()->has('Flash')) {
                 foreach ($this->_emails as $email) {
                     if (isset($email['error'])) {
-                        $event->getSubject()->components()->get('Flash')->error('Email sending failed: ' . $email['error']);
+                        $event->getSubject()->components()->get('Flash')
+                            ->error('Email sending failed: ' . $email['error']);
                     } else {
-                        $event->getSubject()->components()->get('Flash')->success('Email sent');
+                        $event->getSubject()->components()->get('Flash')
+                            ->success('Email sent');
                     }
                 }
             }
@@ -111,9 +118,9 @@ class EmailListener implements EventListenerInterface
     public function implementedEvents(): array
     {
         return [
-            'Email.beforeSend'          => 'beforeSend',
-            'Email.afterSend'           => 'afterSend',
-            'Controller.beforeRender'   => 'beforeRender',
+            'Email.beforeSend' => 'beforeSend',
+            'Email.afterSend' => 'afterSend',
+            'Controller.beforeRender' => 'beforeRender',
         ];
     }
 }

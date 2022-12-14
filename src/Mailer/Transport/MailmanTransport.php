@@ -9,7 +9,7 @@ use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\Log\Log;
 use Cake\Mailer\AbstractTransport;
-use Cake\Mailer\Email;
+use Cake\Mailer\Message;
 use Cake\Mailer\Transport\DebugTransport;
 
 /**
@@ -32,6 +32,8 @@ class MailmanTransport extends AbstractTransport
      */
     public function __construct($config = [], ?AbstractTransport $originalTransport = null)
     {
+        parent::__construct($config);
+
         if ($originalTransport !== null) {
             $this->originalTransport = $originalTransport;
 
@@ -51,13 +53,16 @@ class MailmanTransport extends AbstractTransport
             unset($config['originalClassName']);
             $this->originalTransport = new $className($config);
         } elseif (!empty($config['originalClassName'])) {
-            Log::critical("MailTransport class not found: " . $config['originalClassName']);
+            Log::critical('MailTransport class not found: ' . $config['originalClassName']);
         } elseif (!isset($config['originalClassName']) && Plugin::isLoaded('DebugKit')) { // workaround for DebugKit
             $this->originalTransport = new DebugTransport();
         }
     }
 
-    public function getOriginalTransport()
+    /**
+     * @return \Cake\Mailer\AbstractTransport|null
+     */
+    public function getOriginalTransport(): ?AbstractTransport
     {
         return $this->originalTransport;
     }
@@ -65,16 +70,16 @@ class MailmanTransport extends AbstractTransport
     /**
      * Send mail
      *
-     * @param \Cake\Mailer\Email $email Email instance.
+     * @param \Cake\Mailer\Message $message Email instance.
      * @return array
      * @throws \Exception
      */
-    public function send(Email $email)
+    public function send(Message $message): array
     {
         // dispacth `Email.beforeSend` event
-        $event = EventManager::instance()->dispatch(new Event('Email.beforeSend', $email));
-        if ($event->result instanceof Email) {
-            $email = $event->result;
+        $event = EventManager::instance()->dispatch(new Event('Email.beforeSend', $message));
+        if ($event->getResult() instanceof Message) {
+            $message = $event->getResult();
         }
 
         $result = [];
@@ -84,7 +89,7 @@ class MailmanTransport extends AbstractTransport
                 throw new \RuntimeException('Misconfigured mailman transport');
             }
 
-            $result = $this->originalTransport->send($email);
+            $result = $this->originalTransport->send($message);
         } catch (\Exception $ex) {
             //$exception = $ex;
             $error = $ex->getMessage();
@@ -94,7 +99,7 @@ class MailmanTransport extends AbstractTransport
             $result = ['error' => $error];
         } finally {
             // dispatch `Email.afterSend` event
-            EventManager::instance()->dispatch(new Event('Email.afterSend', $email, $result));
+            EventManager::instance()->dispatch(new Event('Email.afterSend', $message, $result));
 
             // re-throw exception, if any
             //if ($exception !== null) {

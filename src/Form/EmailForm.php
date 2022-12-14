@@ -6,7 +6,10 @@ namespace Mailman\Form;
 use Cake\Form\Form;
 use Cake\Form\Schema;
 use Cake\Mailer\Email;
+use Cake\Mailer\Mailer;
+use Cake\Mailer\Message;
 use Cake\Validation\Validator;
+use Mailman\Mailer\MailmanMailer;
 
 /**
  * Class EmailForm
@@ -31,7 +34,7 @@ class EmailForm extends Form
 
     /**
      * @param \Cake\Validation\Validator $validator
-     * @return $this
+     * @return Validator
      */
     protected function _buildValidator(Validator $validator)
     {
@@ -53,21 +56,36 @@ class EmailForm extends Form
     /**
      * Send email
      *
-     * @param array $data
-     * @return array
+     * @param array $data Form data
+     * @return bool
      */
     protected function _execute(array $data): bool
     {
-        $email = new Email([
-            'transport' => 'default',
+        $message = new Message([
             'from' => $data['from'],
             'to' => $data['to'],
             'subject' => $data['subject'],
-            'template' => false,
-            'layout' => false,
-            'log' => $data['log'],
         ]);
 
-        return $email->send();
+        try {
+            $mailer = new Mailer();
+            $mailer->setProfile([
+                'transport' => 'default',
+                'template' => false,
+                'layout' => false,
+                'log' => $data['log'],
+                //'from' => $data['from'],
+                //'to' => $data['to'],
+                //'subject' => $data['subject'],
+            ]);
+            $mailer->setMessage($message);
+            $mailer->send();
+        } catch (\Exception $ex) {
+            debug($ex->getMessage());
+
+            return false;
+        }
+
+        return true;
     }
 }

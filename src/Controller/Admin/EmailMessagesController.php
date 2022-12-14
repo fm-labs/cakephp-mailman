@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Mailman\Controller\Admin;
 
-use Cake\Mailer\Email;
-
 /**
  * EmailMessages Controller
  *
@@ -12,7 +10,7 @@ use Cake\Mailer\Email;
  */
 class EmailMessagesController extends AppController
 {
-    public $modelClass = "Mailman.EmailMessages";
+    public $modelClass = 'Mailman.EmailMessages';
 
     /**
      * @var array
@@ -30,38 +28,6 @@ class EmailMessagesController extends AppController
         'view' => 'Admin.View',
         'delete' => 'Admin.Delete',
     ];
-
-    /**
-     * Send Test email
-     *
-     * @return void
-     * @TODO Refactor with email form or move to tests
-     */
-    public function test()
-    {
-        $email = new Email([
-            'transport' => 'default',
-            'from' => 'tester@example.org',
-            'to' => ['mailtest@example.org'],
-            'cc' => ['mailtest@example.org'],
-            'bcc' => ['mailtest@example.org'],
-            'sender' => ['mailtest@example.org'],
-            'replyTo' => ['mailtest@example.org'],
-            'readReceipt' => ['mailtest@example.org'],
-            'subject' => 'Test',
-            'template' => false,
-            'layout' => false,
-            'log' => true,
-        ]);
-
-        if (!$email->send()) {
-            $this->Flash->success(__('Email has been sent.'));
-        } else {
-            $this->Flash->error(__('Failed to send email.'));
-        }
-
-        $this->setAction('index');
-    }
 
     /**
      * Index method

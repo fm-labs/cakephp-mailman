@@ -13,7 +13,7 @@ use Cake\Controller\Controller;
 class AppController extends Controller
 {
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function initialize(): void
     {

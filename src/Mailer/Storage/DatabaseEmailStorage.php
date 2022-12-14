@@ -73,12 +73,12 @@ class DatabaseEmailStorage
 
         if ($email->getTransport()) {
             $transport = $email->getTransport();
-            $transportPrefix = "";
+            $transportPrefix = '';
             if ($transport instanceof MailmanTransport && $transport->getOriginalTransport()) {
                 //$transportPrefix = "MailMan:";
                 $transport = $transport->getOriginalTransport();
             } elseif (Plugin::isLoaded('DebugKit') && $transport instanceof DebugKitTransport) {
-                $transportPrefix = "DebugKit:";
+                $transportPrefix = 'DebugKit:';
                 $reflection = new \ReflectionObject($transport);
                 $property = $reflection->getProperty('originalTransport');
                 $property->setAccessible(true);
@@ -121,7 +121,7 @@ class DatabaseEmailStorage
 
         $result = $this->_table->save($entity);
         if (!$result) {
-            Log::alert(sprintf("Failed to store message in database"), ['mailman', 'email']);
+            Log::alert(sprintf('Failed to store message in database'), ['mailman', 'email']);
         }
 
         return $result;
@@ -142,7 +142,7 @@ class DatabaseEmailStorage
         if ($withKeys) {
             $_list = [];
             array_walk($list, function ($val, $key) use (&$_list) {
-                $_list[] = sprintf("%s: %s", $key, $val);
+                $_list[] = sprintf('%s: %s', $key, $val);
             });
             $list = $_list;
             unset($_list);
