@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace Mailman;
 
 use Cake\Core\PluginApplicationInterface;
-use Cake\Event\Event;
-use Cake\Event\EventListenerInterface;
 use Cake\Event\EventManager;
-use Cupcake\Plugin\BasePlugin;
+use Cake\Core\BasePlugin;
 use Mailman\Event\EmailListener;
 
 /**
@@ -15,43 +13,8 @@ use Mailman\Event\EmailListener;
  *
  * @package Mailman
  */
-class Plugin extends BasePlugin implements EventListenerInterface
+class Plugin extends BasePlugin
 {
-    /**
-     * @return array
-     */
-    public function implementedEvents(): array
-    {
-        return [
-            'Admin.Menu.build.admin_primary' => ['callable' => 'buildAdminMenu', 'priority' => 80],
-        ];
-    }
-
-    /**
-     * @param \Cake\Event\Event $event
-     * @param \Cupcake\Menu\MenuItemCollection $menu
-     * @return void
-     */
-    public function buildAdminMenu(Event $event, \Cupcake\Menu\MenuItemCollection $menu): void
-    {
-        $menu->addItem([
-            'title' => 'Mailman',
-            'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
-            'data-icon' => 'envelope-o',
-            'children' => [
-                'history' => [
-                    'title' => __('Email History'),
-                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
-                    'data-icon' => 'history',
-                ],
-                'compose' => [
-                    'title' => __('Compose Email'),
-                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
-                    'data-icon' => 'envelope-open',
-                ],
-            ],
-        ]);
-    }
 
     public function bootstrap(PluginApplicationInterface $app): void
     {
@@ -93,9 +56,15 @@ class Plugin extends BasePlugin implements EventListenerInterface
         $property->setValue($configs);
         */
 
-        // attach listeners
 
-        EventManager::instance()->on($this);
+        // attach listeners
         EventManager::instance()->on(new EmailListener());
+
+        /**
+         * Administration plugin
+         */
+        if (\Cake\Core\Plugin::isLoaded('Admin')) {
+            \Admin\Admin::addPlugin(new \Mailman\Admin());
+        }
     }
 }
