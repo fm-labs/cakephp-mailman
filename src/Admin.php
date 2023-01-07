@@ -35,7 +35,7 @@ class Admin extends BaseAdminPlugin implements EventListenerInterface
     public function implementedEvents(): array
     {
         return [
-            'Admin.Menu.build.admin_primary' => ['callable' => 'buildAdminMenu', 'priority' => 80],
+            'Admin.Menu.build.admin_system' => ['callable' => 'buildAdminSystemMenu', 'priority' => 80],
         ];
     }
 
@@ -44,7 +44,7 @@ class Admin extends BaseAdminPlugin implements EventListenerInterface
      * @param \Cupcake\Menu\MenuItemCollection $menu
      * @return void
      */
-    public function buildAdminMenu(EventInterface $event, \Cupcake\Menu\MenuItemCollection $menu): void
+    public function buildAdminSystemMenu(EventInterface $event, \Cupcake\Menu\MenuItemCollection $menu): void
     {
         $menu->addItem([
             'title' => 'Mailman',
