@@ -50,18 +50,18 @@ class Admin extends BaseAdminPlugin implements EventListenerInterface
             'title' => 'Mailman',
             'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
             'data-icon' => 'envelope-o',
-            'children' => [
-                'history' => [
-                    'title' => __('Email History'),
-                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
-                    'data-icon' => 'history',
-                ],
-                'compose' => [
-                    'title' => __('Compose Email'),
-                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
-                    'data-icon' => 'envelope-open',
-                ],
-            ],
+//            'children' => [
+//                'history' => [
+//                    'title' => __('Email History'),
+//                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
+//                    'data-icon' => 'history',
+//                ],
+//                'compose' => [
+//                    'title' => __('Compose Email'),
+//                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
+//                    'data-icon' => 'envelope-open',
+//                ],
+//            ],
         ]);
     }
 
