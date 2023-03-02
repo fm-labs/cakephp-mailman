@@ -1,5 +1,5 @@
-<?php // $this->Breadcrumbs->add(__('New {0}', __('Email Message'))); ?>
-<?php $this->assign('title', __('Compose Email')); ?>
+<?php // $this->Breadcrumbs->add(__d('mailman', 'New {0}', __d('mailman', 'Email Message'))); ?>
+<?php $this->assign('title', __d('mailman', 'Compose Email')); ?>
 <?php $this->extend('Admin./Base/form'); ?>
 <div class="form">
     <?= $this->Form->create($emailForm, ['class' => 'no-ajax', 'horizontal' => true]); ?>
@@ -12,7 +12,7 @@
         echo $this->Form->control('message', ['rows' => 20]);
         echo $this->Form->control('log', ['default' => true]);
     ?>
-    <?= $this->Form->button(__('Submit')) ?>
+    <?= $this->Form->button(__d('mailman', 'Submit')) ?>
     <?= $this->Form->end() ?>
 
 </div>

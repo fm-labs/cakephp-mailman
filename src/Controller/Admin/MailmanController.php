@@ -48,9 +48,9 @@ class MailmanController extends AppController
         $result = null;
         try {
             $result = $mailer->send();
-            $this->Flash->success(__('Email has been sent.'));
+            $this->Flash->success(__d('mailman', 'Email has been sent.'));
         } catch (\Exception $ex) {
-            $this->Flash->error(__('Failed to send email: {0}', $ex->getMessage()));
+            $this->Flash->error(__d('mailman', 'Failed to send email: {0}', $ex->getMessage()));
         }
 
         $this->set('result', $result);

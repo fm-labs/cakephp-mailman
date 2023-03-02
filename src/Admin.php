@@ -52,12 +52,12 @@ class Admin extends BaseAdminPlugin implements EventListenerInterface
             'data-icon' => 'envelope-o',
 //            'children' => [
 //                'history' => [
-//                    'title' => __('Email History'),
+//                    'title' => __d('mailman', 'Email History'),
 //                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
 //                    'data-icon' => 'history',
 //                ],
 //                'compose' => [
-//                    'title' => __('Compose Email'),
+//                    'title' => __d('mailman', 'Compose Email'),
 //                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
 //                    'data-icon' => 'envelope-open',
 //                ],

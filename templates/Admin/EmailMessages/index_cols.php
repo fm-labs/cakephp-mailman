@@ -1,10 +1,10 @@
 <?php $this->loadHelper('Admin.DataTable'); ?>
 <?php $this->loadHelper('Bootstrap.Button'); ?>
-<?php //$this->Breadcrumbs->add(__('Email Messages')); ?>
+<?php //$this->Breadcrumbs->add(__d('mailman', 'Email Messages')); ?>
 <div class="emailMessages index">
     <div class="row">
         <div class="col-md-3" style="display: none">
-            <?= $this->Button->link(__('Compose'),
+            <?= $this->Button->link(__d('mailman', 'Compose'),
                 ['controller' => 'EmailComposer', 'action' => 'compose'],
                 ['type' => 'primary', 'class' => 'btn-block margin-bottom']); ?>
 
