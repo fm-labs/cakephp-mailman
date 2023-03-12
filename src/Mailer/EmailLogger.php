@@ -1,22 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Mailman\Event;
+namespace Mailman\Mailer;
 
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Event\EventListenerInterface;
 use Cake\Log\Log;
-use Cake\Mailer\Email;
-use Cake\Mailer\Message;
-use Mailman\Mailer\Storage\DatabaseEmailStorage;
+use Mailman\Event\EmailEvent;
 
 /**
  * Class EmailListener
  *
  * @package Mailman\Event
  */
-class EmailListener implements EventListenerInterface
+class EmailLogger implements EventListenerInterface
 {
     /**
      * @var array List of captured email results
@@ -24,49 +22,32 @@ class EmailListener implements EventListenerInterface
     protected $_emails = [];
 
     /**
-     * @param \Cake\Event\Event $event
+     * @param \Mailman\Event\EmailEvent $event
      * @return void
      */
-    public function beforeSend(Event $event)
+    public function beforeSend(EmailEvent $event)
     {
         $email = $event->getSubject();
-        if ($email instanceof Email) {
-            Log::info(sprintf(
-                '[mailman][email][outbox] %s -> %s: %s',
-                join(',', $email->getFrom()),
-                join(',', $email->getTo()),
-                $email->getSubject()
-            ), ['email']);
-        } elseif ($email instanceof Message) {
-            Log::info(sprintf(
-                '[mailman][msg][outbox] %s -> %s: %s',
-                join(',', $email->getFrom()),
-                join(',', $email->getTo()),
-                $email->getOriginalSubject()
-            ), ['email']);
-        }
+        Log::info(sprintf(
+            '[mailman][email][outbox] %s -> %s: %s',
+            join(',', $email->getFrom()),
+            join(',', $email->getTo()),
+            $email->getOriginalSubject()
+        ), ['email']);
 
     }
 
     /**
-     * @param \Cake\Event\Event $event
+     * @param \Mailman\Event\EmailEvent $event
      * @return void
      */
-    public function afterSend(Event $event)
+    public function afterSend(EmailEvent $event)
     {
         try {
             $email = $event->getSubject();
-            if (!($email instanceof Email)) {
-                Log::warning("[mailman] Event subject IS NOT an email object");
-
-                return;
-            }
-
-            $result = $event->getData();
+            $data = $event->getData();
+            $result = $data['result'] ?? [];
             $this->_emails[] = $result;
-
-            $dbStorage = new DatabaseEmailStorage();
-            $dbStorage->store($email, $result);
 
             if (isset($result['error'])) {
                 Log::error(sprintf(
@@ -81,7 +62,7 @@ class EmailListener implements EventListenerInterface
                     '[mailman][email][sent] %s -> %s: %s',
                     join(',', $email->getFrom()),
                     join(',', $email->getTo()),
-                    $email->getOriginalSubject()
+                    $email->getOriginalSubject(),
                 ), ['email']);
             }
         } catch (\Exception $ex) {

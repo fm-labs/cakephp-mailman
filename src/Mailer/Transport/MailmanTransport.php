@@ -4,13 +4,11 @@ declare(strict_types=1);
 namespace Mailman\Mailer\Transport;
 
 use Cake\Core\App;
-use Cake\Core\Plugin;
-use Cake\Event\Event;
 use Cake\Event\EventManager;
 use Cake\Log\Log;
 use Cake\Mailer\AbstractTransport;
 use Cake\Mailer\Message;
-use Cake\Mailer\Transport\DebugTransport;
+use Mailman\Event\EmailEvent;
 
 /**
  * Class MailmanTransport
@@ -30,33 +28,33 @@ class MailmanTransport extends AbstractTransport
      * @param array $config Configuration options.
      * @param \Cake\Mailer\AbstractTransport|null $originalTransport The transport that is to be decorated
      */
-    public function __construct($config = [], ?AbstractTransport $originalTransport = null)
+    public function __construct(array $config = [], ?AbstractTransport $originalTransport = null)
     {
         parent::__construct($config);
 
         if ($originalTransport !== null) {
             $this->originalTransport = $originalTransport;
-
             return;
         }
 
         $className = false;
-        if (!empty($config['originalClassName'])) {
+        if (!empty($config['initialClassName'])) {
             $className = App::className(
-                $config['originalClassName'],
+                $config['initialClassName'],
                 'Mailer/Transport',
                 'Transport'
             );
         }
 
         if ($className) {
-            unset($config['originalClassName']);
+            unset($config['initialClassName']);
             $this->originalTransport = new $className($config);
-        } elseif (!empty($config['originalClassName'])) {
-            Log::critical('MailTransport class not found: ' . $config['originalClassName']);
-        } elseif (!isset($config['originalClassName']) && Plugin::isLoaded('DebugKit')) { // workaround for DebugKit
-            $this->originalTransport = new DebugTransport();
+        } elseif (!empty($config['initialClassName'])) {
+            Log::critical('MailTransport class not found: ' . $config['initialClassName']);
         }
+        //elseif (!isset($config['initialClassName']) && Plugin::isLoaded('DebugKit')) { // workaround for DebugKit
+        //    $this->originalTransport = new DebugTransport();
+        //}
     }
 
     /**
@@ -77,7 +75,9 @@ class MailmanTransport extends AbstractTransport
     public function send(Message $message): array
     {
         // dispacth `Email.beforeSend` event
-        $event = EventManager::instance()->dispatch(new Event('Email.beforeSend', $message));
+        $event = EventManager::instance()->dispatch(new EmailEvent('Email.beforeSend', $message, [
+            'transportClassName' => get_class($this->originalTransport)
+        ]));
         if ($event->getResult() instanceof Message) {
             $message = $event->getResult();
         }
@@ -99,7 +99,10 @@ class MailmanTransport extends AbstractTransport
             $result = ['error' => $error];
         } finally {
             // dispatch `Email.afterSend` event
-            EventManager::instance()->dispatch(new Event('Email.afterSend', $message, $result));
+            EventManager::instance()->dispatch(new EmailEvent('Email.afterSend', $message, [
+                'result' => $result,
+                'transportClassName' => get_class($this->originalTransport)
+            ]));
 
             // re-throw exception, if any
             //if ($exception !== null) {

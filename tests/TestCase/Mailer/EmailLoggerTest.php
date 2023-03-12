@@ -5,7 +5,7 @@ namespace Mailman\Test\TestCase\Event;
 
 use Cake\Event\Event;
 use Cake\Mailer\Email;
-use Mailman\Event\EmailListener;
+use Mailman\Mailer\EmailLogger;
 use Mailman\Test\TestCase\MailmanTestCase;
 
 /**
@@ -13,10 +13,10 @@ use Mailman\Test\TestCase\MailmanTestCase;
  *
  * @package Mailman\Test\TestCase\Event
  */
-class EmailListenerTest extends MailmanTestCase
+class EmailLoggerTest extends MailmanTestCase
 {
     /**
-     * @var EmailListener
+     * @var EmailLogger
      */
     public $emailListener;
 
@@ -39,7 +39,7 @@ class EmailListenerTest extends MailmanTestCase
             'subject' => 'Test',
         ]);
 
-        $this->emailListener = new EmailListener();
+        $this->emailListener = new EmailLogger();
     }
 
     /**

@@ -24,7 +24,7 @@ class EmailProfilesController extends AppController
         $transportKeys = TransportFactory::configured();
         $transports = array_map(function($key) {
             $config = TransportFactory::getConfig($key);
-            //$config['key'] = $key;
+            $config['key'] = $key;
             return $config;
         }, $transportKeys);
         $transports = array_combine($transportKeys, $transports);
@@ -32,7 +32,7 @@ class EmailProfilesController extends AppController
         $profileKeys = Mailer::configured();
         $profiles = array_map(function($key) {
             $config = Mailer::getConfig($key);
-            //$config['key'] = $key;
+            $config['key'] = $key;
             return $config;
         }, $profileKeys);
 

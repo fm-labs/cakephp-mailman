@@ -25,6 +25,7 @@ class EmailForm extends Form
     protected function _buildSchema(Schema $schema): Schema
     {
         return $schema
+            ->addField('profile', ['type' => 'string'])
             ->addField('from', ['type' => 'string'])
             ->addField('to', ['type' => 'string'])
             ->addField('subject', ['type' => 'string'])
@@ -36,9 +37,15 @@ class EmailForm extends Form
      * @param \Cake\Validation\Validator $validator
      * @return Validator
      */
-    protected function _buildValidator(Validator $validator)
+    public function validationDefault(Validator $validator): Validator
     {
         return $validator
+            ->add('profile', 'notblank', [
+                'rule' => 'notBlank',
+            ])
+            ->add('transport', 'notblank', [
+                'rule' => 'notBlank',
+            ])
             ->add('from', 'notblank', [
                 'rule' => 'notBlank',
             ])
@@ -61,28 +68,33 @@ class EmailForm extends Form
      */
     protected function _execute(array $data): bool
     {
-        $message = new Message([
-            'from' => $data['from'],
-            'to' => $data['to'],
-            'subject' => $data['subject'],
-        ]);
-
         try {
-            $mailer = new Mailer();
+            $profile = $data['profile'] ?? 'default';
+            $mailer = new MailmanMailer($profile);
             $mailer->setProfile([
-                'transport' => 'default',
-                'template' => false,
-                'layout' => false,
-                'log' => $data['log'],
+                'transport' => $data['transport'],
+                'from' => $data['from'],
+                'to' => $data['to'],
+                'subject' => $data['subject'],
+                'template' => null,
+                'layout' => null,
+                'log' => (bool)$data['log'],
                 //'from' => $data['from'],
                 //'to' => $data['to'],
                 //'subject' => $data['subject'],
             ]);
-            $mailer->setMessage($message);
-            $mailer->send();
+            $mailer->deliver($data['message']);
+//            $mailer = new MailmanMailer($profile);
+//            $options = [
+//                'transport' => $data['transport'],
+//                'from' => $data['from'],
+//                'to' => $data['to'],
+//                'subject' => $data['subject'],
+//            ];
+//            $message = $data['message'];
+//            $mailer->send('composed', [$options, $message]);
         } catch (\Exception $ex) {
             debug($ex->getMessage());
-
             return false;
         }
 

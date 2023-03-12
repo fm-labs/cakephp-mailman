@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Mailman\Mailer;
 
 //use Cake\Log\Log;
+use Cake\Log\Log;
 use Cake\Mailer\Email;
 use Cake\Mailer\Exception\MissingActionException;
 use Cake\Mailer\Mailer;
@@ -17,6 +18,18 @@ use Cake\Mailer\Mailer;
  */
 class MailmanMailer extends Mailer
 {
+//    public function composed($profile, $message)
+//    {
+//        $this
+//            ->setProfile($profile)
+//            ->viewBuilder()
+//                ->setTemplate(null)
+//                ->setLayout(null);
+//        $this->setMessage($this->getMessage()
+//                ->setBody(['text' => $message]));
+//        return $this;
+//    }
+
     /**
      * Sends email.
      *
@@ -46,9 +59,11 @@ class MailmanMailer extends Mailer
 
             return $this->_send($this->_email);
             */
-            $result = $this->send($action, $args, $headers);
+            $result = parent::send($action, $args, $headers);
+
+            Log::info(json_encode($result), ['email']);
         } finally {
-            $this->reset();
+            //$this->reset();
         }
 
         return $result;

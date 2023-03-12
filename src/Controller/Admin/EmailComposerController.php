@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Mailman\Controller\Admin;
 
+use Cake\Mailer\Mailer;
 use Mailman\Form\EmailForm;
 
 /**
@@ -29,6 +30,8 @@ class EmailComposerController extends AppController
      */
     public function compose(): void
     {
+        $profile = $this->request->getQuery('profile', 'default');
+
         $form = new EmailForm();
         $result = null;
         if ($this->request->is(['post', 'put'])) {
@@ -38,7 +41,14 @@ class EmailComposerController extends AppController
             } catch (\Exception $ex) {
                 $this->Flash->error($ex->getMessage());
             }
+        } else {
+            $config = Mailer::getConfig($profile);
+            $config['profile'] = $profile;
+            $this->request = $this->request->withParsedBody($config);
         }
+
+        $profileKeys = Mailer::configured();
+        $this->set('profiles', $profileKeys);
 
         $this->set('emailForm', $form);
         $this->set('result', $result);

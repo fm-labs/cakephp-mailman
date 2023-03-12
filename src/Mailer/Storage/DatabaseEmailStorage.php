@@ -4,33 +4,34 @@ declare(strict_types=1);
 namespace Mailman\Mailer\Storage;
 
 use Cake\Core\InstanceConfigTrait;
-use Cake\Core\Plugin;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventListenerInterface;
 use Cake\Log\Log;
 use Cake\Mailer\Email;
+use Cake\Mailer\Message;
 use Cake\ORM\TableRegistry;
-use DebugKit\Mailer\Transport\DebugKitTransport;
-use Mailman\Mailer\Transport\MailmanTransport;
+use Mailman\Event\EmailEvent;
 
 /**
  * Class DatabaseEmailStorage
  *
  * @package Mailman\Mailer\Storage
  */
-class DatabaseEmailStorage
+class DatabaseEmailStorage implements EventListenerInterface
 {
     use InstanceConfigTrait;
 
     /**
      * @var array
      */
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'model' => 'Mailman.EmailMessages',
     ];
 
     /**
      * @var \Cake\ORM\Table
      */
-    protected $_table;
+    protected \Cake\ORM\Table $_table;
 
     /**
      * @param array $config
@@ -44,56 +45,72 @@ class DatabaseEmailStorage
     /**
      * Store Email instance in database
      *
-     * @param \Cake\Mailer\Email $email
-     * @param null $transportResult
-     * @return bool|\Cake\Datasource\EntityInterface|mixed
+     * @param Email|Message $email
+     * @param null $transport
+     * @return bool|EntityInterface|mixed
      */
-    public function store(Email $email, $transportResult = null)
+    public function store($email, $transport = null)
     {
+        /** @var \Cake\Mailer\Message $msg */
+        $msg = $email;
+        if ($email instanceof Email) {
+            $msg = $email->getMessage();
+        }
+
+        $transportResult = $transport['result'] ?? [];
+        $transportClassName = $transport['transportClassName'] ?? null;
+
+
+        $transportName = explode('\\', $transportClassName);
+        $transportName = array_pop($transportName);
+        $transportName = substr($transportName, 0, -strlen('Transport'));
+
         // Email instance to EmailMessage entity
         /** @var \Mailman\Model\Entity\EmailMessage $entity */
         $entity = $this->_table->newEntity([
-            'charset'       => $email->getCharset(),
-            'subject'       => $email->getOriginalSubject(),
-            'from'          => $this->_listToString($email->getFrom()),
-            'sender'        => $this->_listToString($email->getSender()),
-            'to'            => $this->_listToString($email->getTo()),
-            'cc'            => $this->_listToString($email->getCc()),
-            'bcc'           => $this->_listToString($email->getBcc()),
-            'reply_to'      => $this->_listToString($email->getReplyTo()),
-            'read_receipt'  => $this->_listToString($email->getReadReceipt()),
-            'headers'       => $this->_listToString($email->getHeaders(), true),
-            'message'       => $this->_listToString($email->message()),
+            'charset'       => $msg->getCharset(),
+            'subject'       => $msg->getOriginalSubject(),
+            'from'          => $this->_listToString($msg->getFrom()),
+            'sender'        => $this->_listToString($msg->getSender()),
+            'to'            => $this->_listToString($msg->getTo()),
+            'cc'            => $this->_listToString($msg->getCc()),
+            'bcc'           => $this->_listToString($msg->getBcc()),
+            'reply_to'      => $this->_listToString($msg->getReplyTo()),
+            'read_receipt'  => $this->_listToString($msg->getReadReceipt()),
+            'headers'       => $this->_listToString($msg->getHeaders(), true),
+            'message'       => $msg->getBodyText(),
             'folder'        => 'sent',
             'error_code'    => 0,
             'error_message' => '',
             'sent'          => 0,
             'date_delivery' => null,
+            'transport'     => $transportName,
         ]);
 
-        if ($email->getTransport()) {
-            $transport = $email->getTransport();
-            $transportPrefix = '';
-            if ($transport instanceof MailmanTransport && $transport->getOriginalTransport()) {
-                //$transportPrefix = "MailMan:";
-                $transport = $transport->getOriginalTransport();
-            } elseif (Plugin::isLoaded('DebugKit') && $transport instanceof DebugKitTransport) {
-                $transportPrefix = 'DebugKit:';
-                $reflection = new \ReflectionObject($transport);
-                $property = $reflection->getProperty('originalTransport');
-                $property->setAccessible(true);
-                $transport = $property->getValue($transport);
 
-                if ($transport instanceof MailmanTransport && $transport->getOriginalTransport()) {
-                    //$transportPrefix .= "MailMan:";
-                    $transport = $transport->getOriginalTransport();
-                }
-            }
-
-            $transportName = explode('\\', get_class($transport));
-            $transportName = array_pop($transportName);
-            $entity->transport = $transportPrefix . substr($transportName, 0, -strlen('Transport'));
-        }
+//        if ($msg->getTransport()) {
+//            $transport = $msg->getTransport();
+//            $transportPrefix = '';
+//            if ($transport instanceof MailmanTransport && $transport->getOriginalTransport()) {
+//                //$transportPrefix = "MailMan:";
+//                $transport = $transport->getOriginalTransport();
+//            } elseif (Plugin::isLoaded('DebugKit') && $transport instanceof DebugKitTransport) {
+//                $transportPrefix = 'DebugKit:';
+//                $reflection = new \ReflectionObject($transport);
+//                $property = $reflection->getProperty('originalTransport');
+//                $property->setAccessible(true);
+//                $transport = $property->getValue($transport);
+//
+//                if ($transport instanceof MailmanTransport && $transport->getOriginalTransport()) {
+//                    //$transportPrefix .= "MailMan:";
+//                    $transport = $transport->getOriginalTransport();
+//                }
+//            }
+//
+//            $transportName = explode('\\', get_class($transport));
+//            $transportName = array_pop($transportName);
+//            $entity->transport = $transportPrefix . substr($transportName, 0, -strlen('Transport'));
+//        }
 
         if (!is_array($transportResult) || empty($transportResult)) {
             $entity->folder = 'outbox';
@@ -122,18 +139,46 @@ class DatabaseEmailStorage
         $result = $this->_table->save($entity);
         if (!$result) {
             Log::alert(sprintf('Failed to store message in database'), ['mailman', 'email']);
+            //Log::debug(json_encode($entity->getErrors()), ['mailman', 'email']);
         }
 
         return $result;
     }
 
     /**
-     * @param $list
-     * @param bool|false $withKeys
-     * @param string $sep
-     * @return array|string
+     * @param \Mailman\Event\EmailEvent $event
+     * @return void
      */
-    protected function _listToString($list, $withKeys = false, $sep = PHP_EOL)
+    public function afterEmailSend(EmailEvent $event)
+    {
+        try {
+            $email = $event->getSubject();
+            $transport = $event->getData();
+
+            $this->store($email, $transport);
+        } catch (\Exception $ex) {
+            Log::error('[mailman][storage][db] Failed to store email message: ' . $ex->getMessage(), ['email']);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function implementedEvents(): array
+    {
+        return [
+            //'Email.beforeSend' => 'beforeSend',
+            'Email.afterSend' => 'afterEmailSend',
+        ];
+    }
+
+    /**
+     * @param $list
+     * @param bool $withKeys
+     * @param string $sep
+     * @return string
+     */
+    protected function _listToString($list, bool $withKeys = false, string $sep = PHP_EOL)
     {
         if (is_string($list)) {
             return $list;
