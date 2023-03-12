@@ -14,7 +14,7 @@ use Cake\Routing\RouteBuilder;
  *
  * @package Media
  */
-class Admin extends BaseAdminPlugin implements EventListenerInterface
+class MailmanAdmin extends BaseAdminPlugin implements EventListenerInterface
 {
     /**
      * @inheritDoc
@@ -50,18 +50,23 @@ class Admin extends BaseAdminPlugin implements EventListenerInterface
             'title' => 'Mailman',
             'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
             'data-icon' => 'envelope-o',
-//            'children' => [
-//                'history' => [
-//                    'title' => __d('mailman', 'Email History'),
-//                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
-//                    'data-icon' => 'history',
-//                ],
-//                'compose' => [
-//                    'title' => __d('mailman', 'Compose Email'),
-//                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
-//                    'data-icon' => 'envelope-open',
-//                ],
-//            ],
+            'children' => [
+                'mailman_email_history' => [
+                    'title' => __d('mailman', 'Email History'),
+                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
+                    'data-icon' => 'history',
+                ],
+                'mailman_email_profiles' => [
+                    'title' => __d('mailman', 'Email profiles'),
+                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailProfiles', 'action' => 'index'],
+                    'data-icon' => 'gear',
+                ],
+                'mailman_email_compose' => [
+                    'title' => __d('mailman', 'Compose Email'),
+                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
+                    'data-icon' => 'envelope-open',
+                ],
+            ],
         ]);
     }
 

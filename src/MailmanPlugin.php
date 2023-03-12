@@ -13,7 +13,7 @@ use Mailman\Event\EmailListener;
  *
  * @package Mailman
  */
-class Plugin extends BasePlugin
+class MailmanPlugin extends BasePlugin
 {
 
     public function bootstrap(PluginApplicationInterface $app): void
@@ -64,7 +64,7 @@ class Plugin extends BasePlugin
          * Administration plugin
          */
         if (\Cake\Core\Plugin::isLoaded('Admin')) {
-            \Admin\Admin::addPlugin(new \Mailman\Admin());
+            \Admin\Admin::addPlugin(new \Mailman\MailmanAdmin());
         }
     }
 }
