@@ -5,6 +5,7 @@ namespace Mailman;
 
 use Cake\Core\App;
 use Cake\Core\BasePlugin;
+use Cake\Core\Configure;
 use Cake\Core\PluginApplicationInterface;
 use Cake\Event\EventManager;
 use Cake\Log\Engine\FileLog;
@@ -26,6 +27,11 @@ class MailmanPlugin extends BasePlugin
     public function bootstrap(PluginApplicationInterface $app): void
     {
         parent::bootstrap($app);
+
+        if (\Cake\Core\Plugin::isLoaded('Settings')) {
+            Configure::load('Mailman', 'settings');
+        }
+
         /**
          * Log configuration
          */

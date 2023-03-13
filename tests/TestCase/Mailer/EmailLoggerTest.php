@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Mailman\Test\TestCase\Event;
 
-use Cake\Event\Event;
-use Cake\Mailer\Email;
+use Cake\Mailer\Message;
+use Mailman\Event\EmailEvent;
 use Mailman\Mailer\EmailLogger;
 use Mailman\Test\TestCase\MailmanTestCase;
 
@@ -21,9 +21,9 @@ class EmailLoggerTest extends MailmanTestCase
     public $emailListener;
 
     /**
-     * @var Email
+     * @var null|Message
      */
-    public $email;
+    public ?Message $email;
 
     /**
      * Setup
@@ -32,8 +32,7 @@ class EmailLoggerTest extends MailmanTestCase
     {
         parent::setUp();
 
-        $this->email = new Email([
-            'transport' => 'test',
+        $this->email = new Message([
             'from' => 'test@example.org',
             'to' => 'foo@example.org',
             'subject' => 'Test',
@@ -58,7 +57,7 @@ class EmailLoggerTest extends MailmanTestCase
      */
     public function testBeforeSend()
     {
-        $event = new Event('Email.beforeSend', $this->email);
+        $event = new EmailEvent('Email.beforeSend', $this->email);
         $this->emailListener->beforeSend($event);
     }
 
@@ -67,7 +66,7 @@ class EmailLoggerTest extends MailmanTestCase
      */
     public function testAfterSend()
     {
-        $event = new Event('Email.afterSend', $this->email);
+        $event = new EmailEvent('Email.afterSend', $this->email);
         $this->emailListener->afterSend($event);
     }
 }

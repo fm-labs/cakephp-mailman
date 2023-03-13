@@ -5,9 +5,6 @@ namespace Mailman\Form;
 
 use Cake\Form\Form;
 use Cake\Form\Schema;
-use Cake\Mailer\Email;
-use Cake\Mailer\Mailer;
-use Cake\Mailer\Message;
 use Cake\Validation\Validator;
 use Mailman\Mailer\MailmanMailer;
 

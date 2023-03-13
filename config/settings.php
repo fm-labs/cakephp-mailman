@@ -1,7 +1,7 @@
 <?php
 return [
     'Settings' => [
-        'Admin' => [
+        'Mailman' => [
             'groups' => [
                 'Mailman.Debug' => [
                     'label' => __d('mailman', 'Email Debug Settings'),
