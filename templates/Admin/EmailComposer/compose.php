@@ -4,7 +4,7 @@
 <?php $profiles = $this->get('profiles', ['default']) ?>
 <?php $emailForm = $this->get('emailForm', null) ?>
 <div class="form">
-    <strong><?= __('Select email profile') ?>:</strong>
+    <strong><?= __d('mailman', 'Select email profile') ?>:</strong>
     <?php foreach($profiles as $profile): ?>
         <?= $this->Html->link($profile, ['action' => 'compose', '?' => ['profile' => $profile]]); ?>&nbsp;
     <?php endforeach; ?>
