@@ -1,0 +1,53 @@
+# LANGUAGE translation of CakePHP Application
+# Copyright YEAR NAME <EMAIL@ADDRESS>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"POT-Creation-Date: 2023-03-13 00:10+0000\n"
+"PO-Revision-Date: 2023-03-13 01:53+0100\n"
+"Last-Translator: \n"
+"Language-Team: LANGUAGE <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.2.2\n"
+
+#: mnt/DATA/workspaces/php/cakephp-mailman/src/Controller/Admin/EmailComposerController.php:40
+msgid "Email message has been sent"
+msgstr "Email Nachricht wurde gesendet"
+
+#: mnt/DATA/workspaces/php/cakephp-mailman/src/Controller/Admin/MailmanController.php:51
+msgid "Email has been sent."
+msgstr "Email wurde gesendet."
+
+#: mnt/DATA/workspaces/php/cakephp-mailman/src/Controller/Admin/MailmanController.php:53
+msgid "Failed to send email: {0}"
+msgstr "Fehler beim Email senden: {0}"
+
+#: mnt/DATA/workspaces/php/cakephp-mailman/src/MailmanAdmin.php:55
+msgid "Email History"
+msgstr "Email Nachrichten"
+
+#: mnt/DATA/workspaces/php/cakephp-mailman/src/MailmanAdmin.php:60
+msgid "Email profiles"
+msgstr "Emailprofile"
+
+#: mnt/DATA/workspaces/php/cakephp-mailman/src/MailmanAdmin.php:65
+#: mnt/DATA/workspaces/php/cakephp-mailman/templates/Admin/EmailComposer/compose.php:2
+msgid "Compose Email"
+msgstr "Email erstellen"
+
+#: mnt/DATA/workspaces/php/cakephp-mailman/templates/Admin/EmailComposer/compose.php:7
+msgid "Select email profile"
+msgstr "Emailprofil auswählen"
+
+#: mnt/DATA/workspaces/php/cakephp-mailman/templates/Admin/EmailComposer/compose.php:25
+msgid "Submit"
+msgstr "Absenden"
+
+#: mnt/DATA/workspaces/php/cakephp-mailman/templates/Admin/EmailMessages/index_cols.php:7
+msgid "Compose"
+msgstr "Erstellen"
