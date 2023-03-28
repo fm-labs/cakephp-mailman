@@ -36,7 +36,7 @@ class EmailComposerController extends AppController
         $result = null;
         if ($this->request->is(['post', 'put'])) {
             try {
-                $result = $form->execute($this->request->getData());
+                $form->execute($this->request->getData());
                 $this->Flash->success(__d('mailman', 'Email message has been sent'));
             } catch (\Exception $ex) {
                 $this->Flash->error($ex->getMessage());

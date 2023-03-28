@@ -92,7 +92,8 @@ class EmailForm extends Form
 //            $mailer->send('composed', [$options, $message]);
         } catch (\Exception $ex) {
             debug($ex->getMessage());
-            return false;
+            //return false;
+            throw $ex;
         }
 
         return true;

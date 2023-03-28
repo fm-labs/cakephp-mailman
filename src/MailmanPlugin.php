@@ -45,6 +45,18 @@ class MailmanPlugin extends BasePlugin
             ]);
         }
 
+        $registry = TransportFactory::getRegistry();
+
+//        $configured = TransportFactory::configured();
+//        foreach ($configured as $name) {
+//            $config = TransportFactory::getConfig($name);
+//            debug($config);
+//
+//            if ($registry->has($name)) {
+//                debug($registry->get($name));
+//            }
+//        }
+
         $reflection = new ReflectionClass(TransportFactory::class);
         $property = $reflection->getProperty('_config');
         $property->setAccessible(true);
@@ -68,6 +80,7 @@ class MailmanPlugin extends BasePlugin
             $transport['className'] = 'Mailman.Mailman';
 
             $configs[$name] = $transport;
+            $registry->unload($name);
         }
         $property->setValue($configs);
 
@@ -119,8 +132,8 @@ class MailmanPlugin extends BasePlugin
             \Admin\Admin::addPlugin(new \Mailman\MailmanAdmin());
         }
 
-//        $debugkitPanels = Configure::read('DebugKit.panels', []);
-//        $debugkitPanels['DebugKit.Mail'] = false;
-//        Configure::write('DebugKit.panels', $debugkitPanels);
+        $debugkitPanels = Configure::read('DebugKit.panels', []);
+        $debugkitPanels['DebugKit.Mail'] = false;
+        Configure::write('DebugKit.panels', $debugkitPanels);
     }
 }
