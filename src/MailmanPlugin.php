@@ -41,7 +41,17 @@ class MailmanPlugin extends BasePlugin
                 'path' => LOGS,
                 'file' => 'email',
                 //'levels' => ['notice', 'info', 'debug'],
-                'scopes' => ['email', 'mailman'],
+                'scopes' => ['email'],
+            ]);
+        }
+
+        if (!Log::getConfig('mailman')) {
+            Log::setConfig('mailman', [
+                'className' => 'Cake\Log\Engine\FileLog',
+                'path' => LOGS,
+                'file' => 'mailman',
+                //'levels' => ['notice', 'info', 'debug'],
+                'scopes' => ['mailman'],
             ]);
         }
 
@@ -82,44 +92,8 @@ class MailmanPlugin extends BasePlugin
             $configs[$name] = $transport;
             $registry->unload($name);
         }
+        //debug($configs);
         $property->setValue($configs);
-
-        // inject MailmanTransport into all email transport configs
-        // @todo MailmanTransport injection not working in 3.8
-        /*
-        $reflection = new ReflectionClass(Email::class);
-        $property = $reflection->getProperty('_transportConfig');
-        $property->setAccessible(true);
-        $configs = $property->getValue();
-
-        $configs = array_map(function ($transport) {
-
-            if (is_object($transport) && $transport instanceof MailmanTransport) {
-                return $transport;
-            }
-
-            if (is_object($transport)) {
-                $transport = new MailmanTransport([], $transport);
-
-                return $transport;
-            }
-
-            $className = App::className($transport['className'], 'Mailer/Transport', 'Transport');
-            if (!$className) {
-                Log::critical("Mailer Transport Class not found: " . $transport['className']);
-
-                return $transport;
-            }
-
-            $transport['originalClassName'] = $transport['className'];
-            $transport['className'] = 'Mailman.Mailman';
-
-            return $transport;
-        }, $configs);
-
-        $property->setValue($configs);
-        */
-
 
         // attach listeners
         EventManager::instance()->on(new EmailLogger());
@@ -132,8 +106,8 @@ class MailmanPlugin extends BasePlugin
             \Admin\Admin::addPlugin(new \Mailman\MailmanAdmin());
         }
 
-        $debugkitPanels = Configure::read('DebugKit.panels', []);
-        $debugkitPanels['DebugKit.Mail'] = false;
-        Configure::write('DebugKit.panels', $debugkitPanels);
+        //$debugkitPanels = Configure::read('DebugKit.panels', []);
+        //$debugkitPanels['DebugKit.Mail'] = false;
+        //Configure::write('DebugKit.panels', $debugkitPanels);
     }
 }
