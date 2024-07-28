@@ -75,7 +75,7 @@ class MailmanTransport extends AbstractTransport
      */
     public function send(Message $message): array
     {
-        //Log::debug("MailmanTransport::send (before)", ['email']);
+        Log::debug("MailmanTransport::send (before)", ['email']);
         // dispatch `Email.beforeSend` event
         $event = EventManager::instance()->dispatch(new EmailEvent('Email.beforeSend', $message, [
             'transportClassName' => get_class($this->originalTransport)

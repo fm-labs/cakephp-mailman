@@ -56,15 +56,15 @@ class MailmanAdmin extends BaseAdminPlugin implements EventListenerInterface
                     'url' => ['plugin' => 'Mailman', 'controller' => 'EmailMessages', 'action' => 'index'],
                     'data-icon' => 'history',
                 ],
-                'mailman_email_profiles' => [
-                    'title' => __d('mailman', 'Email profiles'),
-                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailProfiles', 'action' => 'index'],
-                    'data-icon' => 'gear',
-                ],
                 'mailman_email_compose' => [
-                    'title' => __d('mailman', 'Compose Email'),
+                    'title' => __d('mailman', 'Write Email'),
                     'url' => ['plugin' => 'Mailman', 'controller' => 'EmailComposer', 'action' => 'compose'],
                     'data-icon' => 'envelope-open',
+                ],
+                'mailman_email_profiles' => [
+                    'title' => __d('mailman', 'Email Profiles'),
+                    'url' => ['plugin' => 'Mailman', 'controller' => 'EmailProfiles', 'action' => 'index'],
+                    'data-icon' => 'gear',
                 ],
             ],
         ]);

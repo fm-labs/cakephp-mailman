@@ -7,10 +7,13 @@ namespace Mailman\Controller\Admin;
  * EmailMessages Controller
  *
  * @property \Mailman\Model\Table\EmailMessagesTable $EmailMessages
+ * @property \Admin\Controller\Component\ActionComponent $Action
  */
 class EmailMessagesController extends AppController
 {
-    public $modelClass = 'Mailman.EmailMessages';
+    //public $modelClass = 'Mailman.EmailMessages';
+
+    public $defaultTable = 'Mailman.EmailMessages';
 
     /**
      * @var array
@@ -36,9 +39,11 @@ class EmailMessagesController extends AppController
      */
     public function index()
     {
+        $action = $this->Action->getAction('index');
+
         $this->paginate = [];
 
-        $this->set([
+        $action->setVars([
             'paginate' => true,
             'sortable' => false,
             'filter' => false,
@@ -59,12 +64,13 @@ class EmailMessagesController extends AppController
             ],
         ]);
 
-//        $this->Action->registerExternal('compose', [
-//            'label' => 'Compose Message',
-//            'url' =>  ['controller' => 'EmailComposer', 'action' => 'compose'],
-//            'scope' => ['index']
-//        ]);
-        $this->Action->execute();
+        $this->Action->registerExternal('compose', [
+            'label' => 'Compose Message',
+            'url' =>  ['controller' => 'EmailComposer', 'action' => 'compose'],
+            'scope' => ['index']
+        ]);
+
+        $this->Action->dispatch($action);
     }
 
     /**

@@ -33,8 +33,7 @@ class EmailLogger implements EventListenerInterface
             join(',', $email->getFrom()),
             join(',', $email->getTo()),
             $email->getOriginalSubject()
-        ), ['email']);
-
+        ),  ['scope' => ['email', 'mailman']]);
     }
 
     /**
@@ -56,17 +55,17 @@ class EmailLogger implements EventListenerInterface
                     join(',', $email->getTo()),
                     $email->getOriginalSubject(),
                     $result['error']
-                ), ['email']);
+                ), ['scope' => ['email', 'mailman']]);
             } else {
                 Log::info(sprintf(
                     '[mailman][email][sent] %s -> %s: %s',
                     join(',', $email->getFrom()),
                     join(',', $email->getTo()),
                     $email->getOriginalSubject(),
-                ), ['email']);
+                ), ['scope' => ['email', 'mailman']]);
             }
         } catch (\Exception $ex) {
-            Log::error('[mailman][storage][db] Failed to store email message: ' . $ex->getMessage(), ['email']);
+            Log::error('[mailman][logger] Failed to log message: ' . $ex->getMessage());
         }
     }
 

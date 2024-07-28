@@ -23,7 +23,6 @@ use ReflectionClass;
  */
 class MailmanPlugin extends BasePlugin
 {
-
     public function bootstrap(PluginApplicationInterface $app): void
     {
         parent::bootstrap($app);
@@ -55,49 +54,55 @@ class MailmanPlugin extends BasePlugin
             ]);
         }
 
-        $registry = TransportFactory::getRegistry();
+        if (Configure::read('Mailman.Transport.enableEmailLogger')) {
+            $registry = TransportFactory::getRegistry();
 
-//        $configured = TransportFactory::configured();
-//        foreach ($configured as $name) {
-//            $config = TransportFactory::getConfig($name);
-//            debug($config);
-//
-//            if ($registry->has($name)) {
-//                debug($registry->get($name));
-//            }
-//        }
+            //        $configured = TransportFactory::configured();
+            //        foreach ($configured as $name) {
+            //            $config = TransportFactory::getConfig($name);
+            //            debug($config);
+            //
+            //            if ($registry->has($name)) {
+            //                debug($registry->get($name));
+            //            }
+            //        }
 
-        $reflection = new ReflectionClass(TransportFactory::class);
-        $property = $reflection->getProperty('_config');
-        $property->setAccessible(true);
-        /** @var array<\Cake\Mailer\AbstractTransport|array> $configs */
-        $configs = $property->getValue();
+            $reflection = new ReflectionClass(TransportFactory::class);
+            $property = $reflection->getProperty('_config');
+            $property->setAccessible(true);
+            /** @var array<\Cake\Mailer\AbstractTransport|array> $configs */
+            $configs = $property->getValue();
 
-        foreach ($configs as $name => $transport) {
-            if (is_object($transport)) {
-                if (!$transport instanceof MailmanTransport) {
-                    $configs[$name] = new MailmanTransport([], $transport);
+            foreach ($configs as $name => $transport) {
+                if (is_object($transport)) {
+                    if (!$transport instanceof MailmanTransport) {
+                        $configs[$name] = new MailmanTransport([], $transport);
+                    }
+                    continue;
                 }
-                continue;
+
+                $className = App::className($transport['className'], 'Mailer/Transport', 'Transport');
+                if (!$className || $className === MailmanTransport::class) {
+                    continue;
+                }
+
+                $transport['initialClassName'] = $transport['className'];
+                $transport['className'] = 'Mailman.Mailman';
+
+                $configs[$name] = $transport;
+                $registry->unload($name);
             }
-
-            $className = App::className($transport['className'], 'Mailer/Transport', 'Transport');
-            if (!$className || $className === MailmanTransport::class) {
-                continue;
-            }
-
-            $transport['initialClassName'] = $transport['className'];
-            $transport['className'] = 'Mailman.Mailman';
-
-            $configs[$name] = $transport;
-            $registry->unload($name);
+            //debug($configs);
+            $property->setValue($configs);
         }
-        //debug($configs);
-        $property->setValue($configs);
 
         // attach listeners
-        EventManager::instance()->on(new EmailLogger());
-        EventManager::instance()->on(new DatabaseEmailStorage());
+        if (Configure::read('Mailman.Transport.enableEmailLogger')) {
+            EventManager::instance()->on(new EmailLogger());
+        }
+        if (Configure::read('Mailman.Transport.enableDatabaseStorage')) {
+            EventManager::instance()->on(new DatabaseEmailStorage());
+        }
 
         /**
          * Administration plugin
